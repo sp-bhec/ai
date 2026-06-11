@@ -176,3 +176,590 @@
             font-size: 0.9rem;
             font-weight: 500;
             color: #93c5fd;
+            margin-top: 12px;
+        }
+
+        /* Main Section Content */
+        main {
+            padding: 60px 0;
+            flex-grow: 1;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Premium Profile Card styles */
+        .card {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .card-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 45px;
+            height: 3px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+
+        .lead-text {
+            font-size: 1.15rem;
+            color: var(--dark);
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        /* Custom Project Showcase Box (Dynamic Link) */
+        .project-highlight {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e293b 100%);
+            border: none;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .project-highlight::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .project-highlight .card-title {
+            color: white;
+        }
+
+        .project-highlight p {
+            color: #cbd5e1;
+            margin-bottom: 24px;
+        }
+
+        /* Elegant button style */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .btn:hover {
+            background-color: #b45309;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(217, 119, 6, 0.4);
+        }
+
+        .btn svg {
+            margin-left: 8px;
+            transition: var(--transition);
+        }
+
+        .btn:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Interactive STEM Tab Section */
+        .tab-system {
+            margin-top: 30px;
+        }
+
+        .tab-headers {
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background-color: var(--light);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .stat-lbl {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Sidebar / Status Widget */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .widget {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Live Office Indicator */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #94a3b8;
+            position: relative;
+        }
+
+        .status-dot.active {
+            background-color: #10b981;
+        }
+        
+        .status-dot.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background-color: #10b981;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        .info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 8px;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: #94a3b8;
+            padding: 40px 0;
+            border-top: 1px solid #1e293b;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-brand {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.6rem;
+            }
+            .nav-links {
+                display: none; /* Keep layout clean on mobile viewports */
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Responsive Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="logo">Sagar.</a>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link">Home</a></li>
+                <li><a href="#initiatives" class="nav-link">STEM Divisions</a></li>
+                <li><a href="life_in_universe.html" class="nav-link">Special Projects</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header Hero Grid Section -->
+    <header>
+        <div class="container hero-content">
+            <div class="title-pre">Leadership Profile</div>
+            <h1>Sagar</h1>
+            <div class="hero-subtitle">Dean of STEM</div>
+            <div class="institution-badge">Hill College</div>
+        </div>
+    </header>
+
+    <!-- Main Section -->
+    <main class="container">
+        <div class="grid-layout">
+            
+            <!-- Left Side Core Content -->
+            <div class="content-area">
+                
+                <!-- Welcome Card -->
+                <section class="card">
+                    <h2 class="card-title">Dean's Address</h2>
+                    <p class="lead-text">Welcome to the Science, Technology, Engineering, and Mathematics division at Hill College.</p>
+                    <p>Our division focuses on crafting highly modern, hands-on environments where academic excellence intersects directly with scientific curiosity. By aligning industry-driven methodologies with robust lecture structures, we prepare our collegiate community to challenge conventions and innovate in a changing landscape.</p>
+                </section>
+
+                <!-- Dynamic Project Spotlight (Contains Requested Link) -->
+                <section class="card project-highlight">
+                    <h2 class="card-title">Interactive Research Space</h2>
+                    <p>Dive deep into my recent seminar materials examining Astrobiology, cosmic evolution, and habitable goldilocks thresholds across stellar neighborhoods.</p>
+                    <a href="life_in_universe.html" class="btn">
+                        Explore Life in the Universe
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                </section>
+
+                <!-- STEM Initiatives Tab System -->
+                <section class="card" id="initiatives">
+                    <h2 class="card-title">STEM Divisional Departments</h2>
+                    <p style="margin-bottom: 20px;">Select a department below to explore active pathways, laboratory scopes, and student enrollment metrics.</p>
+                    
+                    <div class="tab-system">
+                        <div class="tab-headers">
+                            <button class="tab-btn active" onclick="switchTab('science')">Science</button>
+                            <button class="tab-btn" onclick="switchTab('tech')">Technology</button>
+                            <button class="tab-btn" onclick="switchTab('engineering')">Engineering</button>
+                            <button class="tab-btn" onclick="switchTab('math')">Mathematics</button>
+                        </div>
+
+                        <!-- Science Pane -->
+                        <div class="tab-pane active" id="pane-science">
+                            <p>Featuring cutting-edge programs in Physics, Biology, and Chemistry. Our students engage in active field research and modern lab work to explore natural and organic systems.</p>
+                            <div class="stat-grid">
+                                <div class="stat-box">
+                                    <div class="stat-val">12</div>
+                                    <div class="stat-lbl">Active Lab Groups</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-val">94%</div>
+                                    <div class="stat-lbl">Research Placement</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tech Pane -->
+                        <div class="tab-pane" id="pane-tech">
+                            <p>Focusing on foundational software development, computer security paradigms, and database systems. Designed in step with contemporary modern tech stacks.</p>
+                            <div class="stat-grid">
+                                <div class="stat-box">
+                                    <div class="stat-val">320+</div>
+                                    <div class="stat-lbl">Code Repositories</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-val">5</div>
+                                    <div class="stat-lbl">Tech Certifications</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Engineering Pane -->
+                        <div class="tab-pane" id="pane-engineering">
+                            <p>From CAD prototyping to physical hardware development. Students study structural design patterns, thermodynamics, and real-world system optimization.</p>
+                            <div class="stat-grid">
+                                <div class="stat-box">
+                                    <div class="stat-val">8</div>
+                                    <div class="stat-lbl">Annual Prototypes</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-val">1:1</div>
+                                    <div class="stat-lbl">Equipment Ratio</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Math Pane -->
+                        <div class="tab-pane" id="pane-math">
+                            <p>Uncovering computational strategies, statistics models, and abstract algebra algorithms that provide the necessary bedrock logic for all of STEM.</p>
+                            <div class="stat-grid">
+                                <div class="stat-box">
+                                    <div class="stat-val">100%</div>
+                                    <div class="stat-lbl">Foundational Core</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-val">15</div>
+                                    <div class="stat-lbl">Symposium Papers</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Right Side Sidebar Info -->
+            <div class="sidebar">
+                
+                <!-- Status Dashboard Widget -->
+                <div class="widget">
+                    <div class="widget-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-light)"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        Administration Dashboard
+                    </div>
+                    
+                    <div id="office-status" class="status-pill">
+                        <span class="status-dot" id="status-dot"></span>
+                        <span id="status-text">Calculating status...</span>
+                    </div>
+
+                    <ul class="info-list">
+                        <li class="info-item">
+                            <span class="info-label">Office Location</span>
+                            <span class="info-value">STEM Hall 302</span>
+                        </li>
+                        <li class="info-item">
+                            <span class="info-label">Campus</span>
+                            <span class="info-value">Hill College</span>
+                        </li>
+                        <li class="info-item">
+                            <span class="info-label">Current local time</span>
+                            <span id="live-time" class="info-value">00:00:00 PM</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Academic Pillars -->
+                <div class="widget" style="background-color: var(--primary); color: white;">
+                    <div class="widget-title" style="color: var(--accent);">
+                        Our Pillars
+                    </div>
+                    <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 12px;">Under Dean Sagar's leadership, the STEM Division is focused on three strategic directions:</p>
+                    <ul style="padding-left: 20px; font-size: 0.9rem; display: flex; flex-direction: column; gap: 8px; opacity: 0.95;">
+                        <li>Undergraduate Research Frameworks</li>
+                        <li>Inclusive STEM Classrooms</li>
+                        <li>Active Regional Partnerships</li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div>
+                <span class="footer-brand">Sagar</span>
+                <p style="margin-top: 6px; font-size: 0.8rem; color: #64748b;">Dean of STEM | Hill College</p>
+            </div>
+            <p>&copy; 2026 Sagar. Developed in accordance with Hill College digital design systems.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript Engine -->
+    <script>
+        // Tab system navigation logic
+        function switchTab(tabId) {
+            // Remove active classes
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+            // Find matching tab button by searching buttons matching content
+            const clickedButton = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.textContent.toLowerCase() === tabId);
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+
+            // Set matched pane active
+            const activePane = document.getElementById(`pane-${tabId}`);
+            if (activePane) {
+                activePane.classList.add('active');
+            }
+        }
+
+        // Live dashboard controller (Simulates Active Office Status based on Hours)
+        function updateDashboard() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            
+            // Format Time display beautifully
+            const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('live-time').textContent = formattedTime;
+
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+
+            // Office is active Mon-Fri, 8 AM to 5 PM
+            const day = now.getDay();
+            const isOpen = (day >= 1 && day <= 5) && (hours >= 8 && hours < 17);
+
+            if (isOpen) {
+                statusDot.className = 'status-dot active';
+                statusText.innerHTML = "Office Active & Online";
+            } else {
+                statusDot.className = 'status-dot';
+                statusText.innerHTML = "Office Closed (Off-hours)";
+            }
+        }
+
+        // Run dashboard cycle
+        updateDashboard();
+        setInterval(updateDashboard, 1000);
+    </script>
+</body>
+</html>
