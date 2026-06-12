@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduPrompt Studio - Interactive Lesson Prompt Generator</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              200: '#ddd6fe',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              800: '#5b21b6',
+              900: '#4c1d95',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .mono-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Smooth transitions */
+    .transition-theme {
+      transition: background-color 0.3s ease, border-color 0.3s ease, text-color 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen transition-theme flex flex-col">
+
+  <!-- Header Banner -->
+  <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 transition-theme sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <!-- Title -->
+      <div class="flex items-center gap-3">
+        <div class="bg-brand-600 text-white p-2 rounded-xl shadow-md shadow-brand-500/20">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.57 50.57 0 0 0-2.658-.813A5.906 5.906 0 0 1 12 3.453a5.906 5.906 0 0 1 7.358 5.881 50.58 50.58 0 0 0-2.658.813m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M12 21v-8.25m0-9.75V3" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-600 to-indigo-500 bg-clip-text text-transparent dark:from-brand-400 dark:to-indigo-300">
+            EduPrompt Studio
+          </h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Interactive Pedagogical Prompt Engineer</p>
+        </div>
+      </div>
+
+      <!-- Quick Controls -->
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+        <!-- AI Target Selection -->
+        <div class="flex items-center gap-2">
+          <label for="aiPlatform" class="text-xs font-semibold text-slate-500 dark:text-slate-400 whitespace-nowrap">AI Target:</label>
+          <select id="aiPlatform" onchange="generatePrompt()" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs font-medium py-1.5 px-3 focus:ring-2 focus:ring-brand-500 focus:outline-none transition-theme">
+            <option value="gemini" selected>Gemini (Recommended)</option>
+            <option value="chatgpt">ChatGPT (GPT-4o/o1)</option>
+            <option value="claude">Claude (Artifacts Style)</option>
+            <option value="universal">Universal Prompt</option>
+          </select>
+        </div>
+
+        <!-- Theme Toggle Button -->
+        <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors" title="Toggle Theme" aria-label="Toggle Theme">
+          <!-- Sun Icon (Visible in Dark Mode) -->
+          <svg id="theme-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 hidden">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m0 13.5V21M4.22 4.22l1.591 1.591M16.24 16.24l1.591 1.591M21 12h-2.25m-13.5 0H3m2.234-7.781l1.591 1.591M16.24 7.76l1.591-1.591M12 7.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z" />
+          </svg>
+          <!-- Moon Icon (Visible in Light Mode) -->
+          <svg id="theme-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive Sandbox Workspace -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    
+    <!-- Left Panel: Control / Configurator Form (Col span: 5) -->
+    <section class="lg:col-span-5 flex flex-col gap-5 max-h-[calc(100vh-140px)] lg:overflow-y-auto pr-0 lg:pr-2">
+      
+      <!-- Profile Card / Basic Information -->
+      <div class="bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm transition-theme">
+        <h2 class="text-sm font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-brand-500"></span> 1. Core Metadata
+        </h2>
+        
+        <div class="space-y-4">
+          <!-- Lesson Title -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Lesson Title</label>
+            <input type="text" id="lessonTitle" oninput="generatePrompt()" value="Introduction to Photosynthesis" 
+              class="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 py-2.5 px-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-theme" 
+              placeholder="e.g., Introduction to Neural Networks">
+          </div>
+          
+          <!-- Lesson Subject -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Subject / Discipline</label>
+            <input type="text" id="lessonSubject" oninput="generatePrompt()" value="Biological Sciences (Grade 9-12)" 
+              class="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 py-2.5 px-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-theme" 
+              placeholder="e.g., AP Computer Science A">
+          </div>
+
+          <!-- Learning Objectives -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Learning Objectives (comma separated or lines)</label>
+            <textarea id="learningObjectives" oninput="generatePrompt()" rows="3"
+              class="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 py-2.5 px-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-theme" 
+              placeholder="- Trace the path of an electron through the light-dependent reactions.&#10;- Compare the outputs of light-dependent vs light-independent phases.">1. Understand the chemical formula of photosynthesis.
+2. Distinguish between light-dependent and light-independent reactions.
+3. Identify the role of the chloroplast organelle.</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module Configuration Matrix -->
+      <div class="bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm transition-theme flex-grow">
+        <h2 class="text-sm font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-brand-500"></span> 2. Module Configurator
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Select the structured components you want the AI to design and choose the strategy.</p>
+
+        <!-- Module Accordions / Dynamic Toggles -->
+        <div class="space-y-3.5">
+          
+          <!-- Key Terms Module -->
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 transition-theme">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="modKeyTerms" checked onchange="toggleModule('keyTerms')" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Key Terms Glossary</span>
+              </label>
+              <div id="stratKeyTermsWrapper" class="text-[10px]">
+                <select id="stratKeyTerms" onchange="generatePrompt()" class="rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 py-0.5 px-1.5 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-theme">
+                  <option value="generate" selected>AI Generates</option>
+                  <option value="provide">I will Provide</option>
+                </select>
+              </div>
+            </div>
+            <!-- Custom Details Area -->
+            <div id="areaKeyTerms" class="mt-2.5 hidden">
+              <textarea id="valKeyTerms" oninput="generatePrompt()" placeholder="Paste the key terms you want included (e.g., Chloroplast, Stroma, Thylakoid)..." class="w-full text-xs p-2 rounded border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 focus:outline-none focus:ring-1 focus:ring-brand-500"></textarea>
+            </div>
+          </div>
+
+          <!-- Key Concepts Module -->
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 transition-theme">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="modKeyConcepts" checked onchange="toggleModule('keyConcepts')" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Key Concepts Structure</span>
+              </label>
+              <div id="stratKeyConceptsWrapper" class="text-[10px]">
+                <select id="stratKeyConcepts" onchange="generatePrompt()" class="rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 py-0.5 px-1.5 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-theme">
+                  <option value="generate" selected>AI Generates</option>
+                  <option value="provide">I will Provide</option>
+                </select>
+              </div>
+            </div>
+            <div id="areaKeyConcepts" class="mt-2.5 hidden">
+              <textarea id="valKeyConcepts" oninput="generatePrompt()" placeholder="Provide the core key concepts or frameworks to emphasize..." class="w-full text-xs p-2 rounded border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 focus:outline-none focus:ring-1 focus:ring-brand-500"></textarea>
+            </div>
+          </div>
+
+          <!-- Pre-Test Module -->
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 transition-theme">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="modPreTest" checked onchange="toggleModule('preTest')" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Diagnostic Pre-test</span>
+              </label>
+              <div class="text-[10px] flex items-center gap-1.5">
+                <span class="text-slate-400">Questions:</span>
+                <input type="number" id="numPreTest" min="1" max="10" value="3" onchange="generatePrompt()" class="w-8 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-center py-0.5 px-1 focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Content Module -->
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 transition-theme">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="modContent" checked onchange="toggleModule('content')" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Core Lesson Content</span>
+              </label>
+              <div id="stratContentWrapper" class="text-[10px]">
+                <select id="stratContent" onchange="generatePrompt()" class="rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 py-0.5 px-1.5 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-theme">
+                  <option value="generate" selected>AI Generates Narrative</option>
+                  <option value="provide">I provide bullet outline</option>
+                </select>
+              </div>
+            </div>
+            <div id="areaContent" class="mt-2.5 hidden">
+              <textarea id="valContent" oninput="generatePrompt()" placeholder="Enter your raw curriculum outlines, slide bullet points, or source material..." class="w-full text-xs p-2 rounded border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 focus:outline-none focus:ring-1 focus:ring-brand-500" rows="2"></textarea>
+            </div>
+          </div>
+
+          <!-- Analogies & Real-World Examples -->
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 transition-theme">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="modAnalogies" checked onchange="toggleModule('analogies')" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Analogies & Real-World Examples</span>
+              </label>
+              <div class="text-[10px] flex items-center gap-1.5">
+                <span class="text-slate-400">Tone/Style:</span>
+                <select id="valAnalogiesStyle" onchange="generatePrompt()" class="rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 py-0.5 px-1 focus:outline-none">
+                  <option value="highly relatable/everyday life" selected>Everyday Objects</option>
+                  <option value="historical/scientific discovery contexts">Historical Stories</option>
+                  <option value="gamified/fantasy scenarios">Gamified/Pop-culture</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary Module -->
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 transition-theme">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="modSummary" checked onchange="toggleModule('summary')" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Executive Lesson Summary</span>
+              </label>
+              <div class="text-[10px] flex items-center gap-1.5">
+                <span class="text-slate-400">Format:</span>
+                <select id="valSummaryFormat" onchange="generatePrompt()" class="rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 py-0.5 px-1 focus:outline-none">
+                  <option value="structured bullet points" selected>Bullet Points</option>
+                  <option value="a quick-reference conceptual map structure">Mind Map Outline</option>
+                  <option value="a memorable executive 1-paragraph summary">1-Paragraph Hook</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review Quiz Module -->
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 transition-theme">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="modReviewQuiz" checked onchange="toggleModule('reviewQuiz')" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Review Quiz / Post-Assessment</span>
+              </label>
+              <div class="text-[10px] flex items-center gap-1.5">
+                <span class="text-slate-400">Type:</span>
+                <select id="valQuizType" onchange="generatePrompt()" class="rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 py-0.5 px-1.5 focus:outline-none">
+                  <option value="Multiple-Choice (MCQ) with conceptual explanations" selected>MCQs (with answers)</option>
+                  <option value="Conceptual Open-Response scaffolding questions">Open Response / Essay</option>
+                  <option value="True/False with correction criteria">True / False</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADA Checklist Module -->
+          <div class="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 transition-theme">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input type="checkbox" id="modAdaChecklist" checked onchange="toggleModule('adaChecklist')" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">ADA & Universal Accessibility (UDL)</span>
+              </label>
+              <div class="text-[10px]">
+                <span class="bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300 px-2 py-0.5 rounded-full font-semibold">Enabled</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Panel: Live Prompt Generator / Console (Col span: 7) -->
+    <section class="lg:col-span-7 flex flex-col max-h-[calc(100vh-140px)] gap-4">
+      
+      <!-- Live Preview Container -->
+      <div class="flex-grow flex flex-col bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm transition-theme overflow-hidden">
+        
+        <!-- Preview Panel Header Controls -->
+        <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 flex items-center justify-between transition-theme flex-shrink-0">
+          <div class="flex items-center gap-2">
+            <span class="flex h-2.5 w-2.5 relative">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            <h3 class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">
+              Live Prompt Output
+            </h3>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <!-- Copy Prompt Button -->
+            <button onclick="copyToClipboard()" class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs py-2 px-4 rounded-xl transition-all shadow-md shadow-brand-500/10 active:scale-95" title="Copy structured system prompt">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-3a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.375c0-.621.504-1.125 1.125-1.125h9.75c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.375Z" />
+              </svg>
+              <span>Copy Prompt</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- System Prompt Text Body -->
+        <div class="flex-grow p-5 overflow-y-auto bg-slate-950 text-slate-200 dark:bg-slate-950 selection:bg-brand-500/30">
+          <pre id="promptPreview" class="mono-font text-xs sm:text-[13px] leading-relaxed whitespace-pre-wrap break-words select-all outline-none"></pre>
+        </div>
+
+        <!-- Prompt Console Metadata Footer -->
+        <div class="px-5 py-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 flex flex-wrap items-center justify-between text-xs text-slate-500 dark:text-slate-400 transition-theme flex-shrink-0 gap-2">
+          <div class="flex items-center gap-3">
+            <span>Character Count: <strong id="charCount" class="text-slate-700 dark:text-slate-200 font-medium">0</strong></span>
+            <span>Estimated Tokens: <strong id="tokenCount" class="text-slate-700 dark:text-slate-200 font-medium">0</strong></span>
+          </div>
+          <div>
+            <span class="text-brand-600 dark:text-brand-400 font-semibold flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+              </svg>
+              Copied prompt is ready to run
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Toast/Notification Center -->
+      <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-3.5 px-5 rounded-2xl shadow-xl flex items-center gap-3 transition-all transform translate-y-20 opacity-0 pointer-events-none">
+        <span class="bg-emerald-500 text-white p-1 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+          </svg>
+        </span>
+        <div class="text-xs font-semibold">Prompt Copied to Clipboard! Ready for your AI.</div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Interactive Instruction & Feature Info Grid -->
+  <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-5 transition-theme">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
+      <div class="flex items-center gap-2">
+        <span class="bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 px-2.5 py-1 rounded-lg font-bold">Tip:</span>
+        <span>Use the AI Platform selector to automatically transform formatting structures & system templates.</span>
+      </div>
+      <div>
+        <span>EduPrompt Studio &bull; Crafting Elite AI Education Prompts</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Interaction logic -->
+  <script>
+    // Theme Management Logic
+    function toggleTheme() {
+      const html = document.documentElement;
+      const sunIcon = document.getElementById('theme-sun');
+      const moonIcon = document.getElementById('theme-moon');
+
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        moonIcon.classList.add('hidden');
+        sunIcon.classList.remove('hidden');
+      }
+    }
+
+    // Initialize state on load
+    window.onload = function() {
+      const savedTheme = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const sunIcon = document.getElementById('theme-sun');
+      const moonIcon = document.getElementById('theme-moon');
+
+      if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+        document.documentElement.classList.add('dark');
+        moonIcon.classList.add('hidden');
+        sunIcon.classList.remove('hidden');
+      } else {
+        document.documentElement.classList.remove('dark');
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      }
+
+      // Initial prompt construction
+      generatePrompt();
+    };
+
+    // Toggle custom parameters input visibility in accordion module selection
+    function toggleModule(modName) {
+      const isChecked = document.getElementById(`mod${modName.charAt(0).toUpperCase() + modName.slice(1)}`).checked;
+      const selectorWrapper = document.getElementById(`strat${modName.charAt(0).toUpperCase() + modName.slice(1)}Wrapper`);
+      const valArea = document.getElementById(`area${modName.charAt(0).toUpperCase() + modName.slice(1)}`);
+      const selectElement = document.getElementById(`strat${modName.charAt(0).toUpperCase() + modName.slice(1)}`);
+
+      if (selectorWrapper) {
+        if (isChecked) {
+          selectorWrapper.classList.remove('hidden');
+          // If custom is selected, show area
+          if (selectElement && selectElement.value === 'provide') {
+            if (valArea) valArea.classList.remove('hidden');
+          }
+        } else {
+          selectorWrapper.classList.add('hidden');
+          if (valArea) valArea.classList.add('hidden');
+        }
+      }
+      
+      generatePrompt();
+    }
+
+    // Check specific module Strategy changes (Generate vs Provide)
+    document.querySelectorAll('[id^="strat"]').forEach(selector => {
+      selector.addEventListener('change', function(e) {
+        const modName = e.target.id.replace('strat', '');
+        const valArea = document.getElementById(`area${modName}`);
+        
+        if (e.target.value === 'provide') {
+          if (valArea) valArea.classList.remove('hidden');
+        } else {
+          if (valArea) valArea.classList.add('hidden');
+        }
+        generatePrompt();
+      });
+    });
+
+    // Core Prompt Generator Logic
+    function generatePrompt() {
+      const platform = document.getElementById('aiPlatform').value;
+      const lessonTitle = document.getElementById('lessonTitle').value.trim() || "[Insert Lesson Title]";
+      const lessonSubject = document.getElementById('lessonSubject').value.trim() || "[Insert Subject]";
+      const rawObjectives = document.getElementById('learningObjectives').value.trim();
+      
+      // Modules Enabled States
+      const modKeyTerms = document.getElementById('modKeyTerms').checked;
+      const modKeyConcepts = document.getElementById('modKeyConcepts').checked;
+      const modPreTest = document.getElementById('modPreTest').checked;
+      const modContent = document.getElementById('modContent').checked;
+      const modAnalogies = document.getElementById('modAnalogies').checked;
+      const modSummary = document.getElementById('modSummary').checked;
+      const modReviewQuiz = document.getElementById('modReviewQuiz').checked;
+      const modAdaChecklist = document.getElementById('modAdaChecklist').checked;
+
+      // Module Strategies
+      const stratKeyTerms = document.getElementById('stratKeyTerms').value;
+      const valKeyTerms = document.getElementById('valKeyTerms').value.trim();
+      
+      const stratKeyConcepts = document.getElementById('stratKeyConcepts').value;
+      const valKeyConcepts = document.getElementById('valKeyConcepts').value.trim();
+
+      const numPreTest = document.getElementById('numPreTest').value || 3;
+
+      const stratContent = document.getElementById('stratContent').value;
+      const valContent = document.getElementById('valContent').value.trim();
+
+      const valAnalogiesStyle = document.getElementById('valAnalogiesStyle').value;
+      const valSummaryFormat = document.getElementById('valSummaryFormat').value;
+      const valQuizType = document.getElementById('valQuizType').value;
+
+      // Construct formatting constraints based on AI Engine Selection
+      let systemPersona = "";
+      let closingInstruction = "";
+      
+      if (platform === "gemini") {
+        systemPersona = `You are an expert, dual-certified Instructional Designer and Subject Matter Expert. Your teaching philosophy utilizes cognitive scaffolding, deep active recall, and highly engaging formatting.
+
+Please structure your response using clear, professional markdown tables, highlight quotes, bold key terminology, and high-impact educational formatting suitable for direct rendering or student distribution.`;
+        closingInstruction = `Return only the perfectly crafted modules mapped directly to the requested lesson profile without conversational filler.`;
+      } else if (platform === "chatgpt") {
+        systemPersona = `Act as an elite instructional architect with expertise in pedagogy and the Science of Learning. Your output should follow strict logical sequences, prioritizing micro-learning principles.`;
+        closingInstruction = `Ensure the content is optimized with clean Markdown and emojis for high student readability. Start directly with the lesson content.`;
+      } else if (platform === "claude") {
+        systemPersona = `You are a world-class educational programmer and course developer. Your instructional style is clean, precise, and visually formatted to fit inside rich artifact frames.`;
+        closingInstruction = `Wrap your entire lesson structure cleanly. Do not include introductory conversational text. Start directly with the structured lesson modules.`;
+      } else {
+        systemPersona = `You are an expert educator, curriculum designer, and academic tutor specializing in student comprehension.`;
+        closingInstruction = `Format the output in clean, structured Markdown for instructional use.`;
+      }
+
+      // Generate objectives string
+      let formattedObjectives = "";
+      if (rawObjectives) {
+        formattedObjectives = rawObjectives.split('\n').map(line => `  * ${line.trim()}`).join('\n');
+      } else {
+        formattedObjectives = "  * [To be formulated / determined based on standard curriculum matching]";
+      }
+
+      // Assemble Core Body Prompt
+      let prompt = ``;
+      prompt += `${systemPersona}\n\n`;
+      prompt += `========================================================================\n`;
+      prompt += `INSTRUCTIONAL DESIGN PROFILE & CURRICULUM BLUEPRINT\n`;
+      prompt += `========================================================================\n\n`;
+      prompt += `You are to construct a highly organized, comprehensive pedagogical lesson block based on the following target parameters:\n\n`;
+      prompt += `* **Lesson Title:** ${lessonTitle}\n`;
+      prompt += `* **Subject/Topic Field:** ${lessonSubject}\n`;
+      prompt += `* **Core Learning Objectives:**\n${formattedObjectives}\n\n`;
+      prompt += `------------------------------------------------------------------------\n`;
+      prompt += `REQUIRED STRUCTURAL MODULES TO DESIGN:\n`;
+      prompt += `------------------------------------------------------------------------\n\n`;
+
+      let moduleIndex = 1;
+
+      // Key Terms GLOSSARY
+      if (modKeyTerms) {
+        prompt += `${moduleIndex++}. **Glossary of Key Terms & Vocabulary:**\n`;
+        if (stratKeyTerms === "provide" && valKeyTerms) {
+          prompt += `   * **Instruction:** Organize and define these specific user-provided vocabulary words into a glossary with precise educational definitions: "${valKeyTerms}". Add phonetic pronunciations if helpful.\n\n`;
+        } else {
+          prompt += `   * **Instruction:** Synthesize and compile a definitive glossary of the 5-7 most critical terms, definitions, and conceptual markers required to comprehend this topic.\n\n`;
+        }
+      }
+
+      // Key Concepts Structure
+      if (modKeyConcepts) {
+        prompt += `${moduleIndex++}. **Core Key Concepts & Cognitive Framework:**\n`;
+        if (stratKeyConcepts === "provide" && valKeyConcepts) {
+          prompt += `   * **Instruction:** Deep-dive into, explain, and structure the following concepts: "${valKeyConcepts}". Use clean formatting for maximum student retention.\n\n`;
+        } else {
+          prompt += `   * **Instruction:** Map out and explain the essential foundation theories, core structural concepts, or structural mechanisms governing this topic. Use clear bulleted breakdowns.\n\n`;
+        }
+      }
+
+      // Pre-Test Module
+      if (modPreTest) {
+        prompt += `${moduleIndex++}. **Diagnostic Pre-test & Active Recall Probe:**\n`;
+        prompt += `   * **Instruction:** Generate a custom diagnostic pre-test comprising ${numPreTest} multiple-choice or short-answer questions designed to evaluate prior knowledge, highlight common cognitive misconceptions, and activate curiosity. Include an answer key with high-yield conceptual rationales hidden at the bottom.\n\n`;
+      }
+
+      // Core Lesson Content Narrative
+      if (modContent) {
+        prompt += `${moduleIndex++}. **Comprehensive Core Lesson Narrative:**\n`;
+        if (stratContent === "provide" && valContent) {
+          prompt += `   * **Instruction:** Take the following raw notes/outlines and expand them into a beautifully written, engaging narrative lesson block:\n\n   --- USER NOTES START ---\n   ${valContent}\n   --- USER NOTES END ---\n\n`;
+        } else {
+          prompt += `   * **Instruction:** Generate an engaging, high-fidelity instructional narrative. Break it down using dynamic subheadings, bold emphasis on key vocabulary, and an easily accessible structure. Avoid dry academic prose—make it stimulating, crisp, and intellectually rigorous.\n\n`;
+        }
+      }
+
+      // Analogies & Real-world examples
+      if (modAnalogies) {
+        prompt += `${moduleIndex++}. **Analogies & Real-World Application Matrix:**\n`;
+        prompt += `   * **Instruction:** Synthesize highly powerful instructional analogies and a tangible real-world application mapped to everyday settings. Make sure they are framed using a "${valAnalogiesStyle}" stylistic tone to maximize intuitive comprehension and emotional memory anchoring.\n\n`;
+      }
+
+      // Executive Summary
+      if (modSummary) {
+        prompt += `${moduleIndex++}. **Topic Synthesis & Summary:**\n`;
+        prompt += `   * **Instruction:** Draft a high-yield summary formatted as "${valSummaryFormat}" to enable rapid-review, quick synthesis, and high conceptual reinforcement before self-testing.\n\n`;
+      }
+
+      // Review Quiz
+      if (modReviewQuiz) {
+        prompt += `${moduleIndex++}. **Post-Assessment Review Quiz:**\n`;
+        prompt += `   * **Instruction:** Design a comprehensive review quiz of type: "${valQuizType}". The assessment must directly measure student success against the stated learning objectives. Include clear questions and a separate, detailed answer key explaining exactly *why* correct choices are correct and *why* distractors are incorrect.\n\n`;
+      }
+
+      // ADA Universal Design Checklist
+      if (modAdaChecklist) {
+        prompt += `${moduleIndex++}. **ADA Accessibility & UDL Implementation Guide:**\n`;
+        prompt += `   * **Instruction:** Provide a pedagogical "Universal Design for Learning (UDL)" guide for this specific lesson block. Explicitly include suggestions for alternative multimedia modalities, alt-text guidelines for recommended visuals, strategies for neurodiverse learners, and clear instructions for screen-reader layout optimization.\n\n`;
+      }
+
+      // Global Guardrails & Formatting Output Specs
+      prompt += `------------------------------------------------------------------------\n`;
+      prompt += `EXECUTION PARADIGM & QUALITY CRITERIA\n`;
+      prompt += `------------------------------------------------------------------------\n`;
+      prompt += `1. **Scaffolded Clarity:** Always structure from introductory knowledge to deep conceptual integration.\n`;
+      prompt += `2. **Aesthetics & Readability:** Maximize clean whitespace, bullet points, structured tables, and logical typographic hierarchy.\n`;
+      prompt += `3. **Actionability:** Ensure all quiz questions, glossary structures, and analogies are highly targeted and immediately ready for print or online learning management systems (LMS).\n\n`;
+      prompt += `${closingInstruction}`;
+
+      // Set state in UI
+      const previewEl = document.getElementById('promptPreview');
+      previewEl.textContent = prompt;
+
+      // Update counters
+      const charCount = prompt.length;
+      // Rough approximation of tokens (1 token ~ 4 chars)
+      const tokenEstimate = Math.round(charCount / 4);
+
+      document.getElementById('charCount').textContent = charCount.toLocaleString();
+      document.getElementById('tokenCount').textContent = tokenEstimate.toLocaleString();
+    }
+
+    // Advanced Robust Clipboard Copy Function for iFrame Sandbox Environments
+    function copyToClipboard() {
+      const promptText = document.getElementById('promptPreview').textContent;
+      
+      // Secondary fallback sequence for sandboxed iframe compatibility
+      let copySuccess = false;
+      try {
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = promptText;
+        tempTextArea.style.position = 'fixed';
+        tempTextArea.style.opacity = '0';
+        tempTextArea.style.left = '-999999px';
+        tempTextArea.style.top = '-999999px';
+        document.body.appendChild(tempTextArea);
+        tempTextArea.focus();
+        tempTextArea.select();
+        
+        copySuccess = document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+      } catch (err) {
+        copySuccess = false;
+      }
+
+      // Show Custom Success Toast
+      if (copySuccess) {
+        const toast = document.getElementById('toastNotification');
+        toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+        toast.classList.add('translate-y-0', 'opacity-100');
+
+        setTimeout(() => {
+          toast.classList.remove('translate-y-0', 'opacity-100');
+          toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        }, 3000);
+      }
+    }
+  </script>
+</body>
+</html>
