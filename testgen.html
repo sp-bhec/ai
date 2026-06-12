@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stellar Evolution Exam & LMS Exporter</title>
+  <!-- Tailwind CSS for high-quality, responsive layout -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for engaging iconography -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @media print {
+      body {
+        background-color: #fff;
+        color: #000;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .print-shadow {
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans flex flex-col antialiased">
+
+  <!-- Header Section -->
+  <header class="bg-slate-800 border-b border-slate-700 py-6 px-4 sm:px-6 lg:px-8 no-print shadow-md">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <span class="text-amber-400 text-3xl"><i class="fa-solid fa-user-astronaut animate-pulse"></i></span>
+          <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Stellar Evolution Exam</h1>
+        </div>
+        <p class="text-sm text-slate-400 mt-1">Level: Astronomy Freshman (Introductory College Physics/Cosmology)</p>
+      </div>
+      <!-- Export Actions Panel -->
+      <div class="flex flex-wrap gap-3">
+        <button id="btn-print" onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow transition flex items-center gap-2">
+          <i class="fa-solid fa-file-pdf"></i> Save / Print PDF
+        </button>
+        <button id="btn-export-d2l" onclick="downloadBrightspaceCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded-lg shadow transition flex items-center gap-2">
+          <i class="fa-solid fa-file-csv"></i> Download Brightspace CSV
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Brightspace Explanation Section -->
+  <section class="max-w-6xl mx-auto w-full mt-6 px-4 no-print">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-lg">
+      <h2 class="text-lg font-bold text-amber-400 mb-2 flex items-center gap-2">
+        <i class="fa-solid fa-circle-info"></i> Brightspace Test Bank Format Analysis
+      </h2>
+      <p class="text-sm text-slate-300 leading-relaxed">
+        Brightspace quiz engines import content using standard formatting CSV templates. For our exam, the generated CSV file structures questions using specific keywords in Column A and Column B. For instance, a Multiple Choice question declares <code>NewQuestion, MC</code>, holds the prompt in <code>QuestionText</code>, and lists options with weightings (e.g., <code>100</code> for correct, <code>0</code> for incorrect). Matching (<code>M</code>) separates targets from options with a slash <code>/</code>, and Written Responses (<code>WR</code>) designate grading guides. You can download this fully compatible CSV directly using the button above.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Work Area -->
+  <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8">
+    
+    <!-- Student Header (Appears on PDF Prints) -->
+    <div class="hidden print:block mb-8 border-b-2 border-slate-400 pb-4 text-black">
+      <div class="flex justify-between items-end">
+        <div>
+          <h1 class="text-3xl font-bold">Stellar Evolution Examination</h1>
+          <p class="text-sm text-gray-600">Astronomy 101 — Introductory Astrophysics</p>
+        </div>
+        <div class="text-right">
+          <p class="font-semibold text-lg">Score: ______ / 50</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-6">
+        <div><span class="font-semibold">Student Name:</span> _____________________________________</div>
+        <div><span class="font-semibold">Date:</span> ________________________</div>
+      </div>
+    </div>
+
+    <!-- Exam Content Container -->
+    <form id="exam-form" onsubmit="evaluateExam(event)" class="space-y-8">
+      
+      <!-- Section 1: Multiple Choice -->
+      <div class="print-shadow bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
+        <h2 class="text-xl font-bold text-amber-300 border-b border-slate-700 pb-2 mb-6 flex items-center gap-2">
+          <span class="bg-slate-700 text-amber-300 w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">I</span>
+          Part A: Multiple Choice (Questions 1 - 5)
+        </h2>
+        
+        <div class="space-y-8">
+          <!-- Q1 -->
+          <div class="question-block" data-qtype="MC" data-qid="1">
+            <p class="font-semibold text-lg text-white mb-3">1. Which force is primarily responsible for holding a main-sequence star in hydrostatic equilibrium against the inward pull of gravity?</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q1" value="A" class="mt-1 accent-amber-400" required>
+                <span>A) Strong nuclear force within atomic nuclei</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q1" value="B" class="mt-1 accent-amber-400">
+                <span>B) Outward thermal pressure generated by core fusion</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q1" value="C" class="mt-1 accent-amber-400">
+                <span>C) Electron degeneracy pressure of a crystalline carbon core</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q1" value="D" class="mt-1 accent-amber-400">
+                <span>D) Degenerate neutron pressure opposing gravitational collapse</span>
+              </label>
+            </div>
+            <div class="feedback-box hidden mt-4 p-4 rounded-lg text-sm"></div>
+          </div>
+
+          <!-- Q2 -->
+          <div class="question-block" data-qtype="MC" data-qid="2">
+            <p class="font-semibold text-lg text-white mb-3">2. What stellar remnant will be produced at the end of the life cycle of a star with an initial main-sequence mass of $1.2$ solar masses ($1.2\text{ M}_\odot$)?</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q2" value="A" class="mt-1 accent-amber-400" required>
+                <span>A) Neutron star</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q2" value="B" class="mt-1 accent-amber-400">
+                <span>B) Carbon-oxygen white dwarf</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q2" value="C" class="mt-1 accent-amber-400">
+                <span>C) Stellar-mass black hole</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q2" value="D" class="mt-1 accent-amber-400">
+                <span>D) Helium white dwarf</span>
+              </label>
+            </div>
+            <div class="feedback-box hidden mt-4 p-4 rounded-lg text-sm"></div>
+          </div>
+
+          <!-- Q3 -->
+          <div class="question-block" data-qtype="MC" data-qid="3">
+            <p class="font-semibold text-lg text-white mb-3">3. At what critical threshold is the Chandrasekhar limit defined, and why is it structurally significant?</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q3" value="A" class="mt-1 accent-amber-400" required>
+                <span>A) $1.4\text{ M}_\odot$: The maximum mass that can be supported by electron degeneracy pressure.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q3" value="B" class="mt-1 accent-amber-400">
+                <span>B) $3.0\text{ M}_\odot$: The boundary between neutron stars and black holes.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q3" value="C" class="mt-1 accent-amber-400">
+                <span>C) $8.0\text{ M}_\odot$: The mass limit above which stars end their lives as type II supernovae.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q3" value="D" class="mt-1 accent-amber-400">
+                <span>D) $0.08\text{ M}_\odot$: The mass needed to trigger hydrogen fusion in brown dwarfs.</span>
+              </label>
+            </div>
+            <div class="feedback-box hidden mt-4 p-4 rounded-lg text-sm"></div>
+          </div>
+
+          <!-- Q4 -->
+          <div class="question-block" data-qtype="MC" data-qid="4">
+            <p class="font-semibold text-lg text-white mb-3">4. Why does fusion of iron ($^{56}\text{Fe}$) within massive stars trigger core collapse rather than sustaining stellar stability?</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q4" value="A" class="mt-1 accent-amber-400" required>
+                <span>A) Iron fusion is highly exothermic, causing an explosion that blasts the outer layers into space.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q4" value="B" class="mt-1 accent-amber-400">
+                <span>B) Iron nuclei fuse via endothermic processes, consuming rather than generating core thermal energy.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q4" value="C" class="mt-1 accent-amber-400">
+                <span>C) Iron acts as a catalyst that forces instant carbon burning throughout the convective layers.</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q4" value="D" class="mt-1 accent-amber-400">
+                <span>D) Iron decreases the core density so rapidly that gravitational force falls to near zero.</span>
+              </label>
+            </div>
+            <div class="feedback-box hidden mt-4 p-4 rounded-lg text-sm"></div>
+          </div>
+
+          <!-- Q5 -->
+          <div class="question-block" data-qtype="MC" data-qid="5">
+            <p class="font-semibold text-lg text-white mb-3">5. Which nucleosynthesis pathway dominates hydrogen fusion inside massive stars ($M > 1.5\text{ M}_\odot$) during their main-sequence lifetime?</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q5" value="A" class="mt-1 accent-amber-400" required>
+                <span>A) Proton-Proton (p-p) Chain</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q5" value="B" class="mt-1 accent-amber-400">
+                <span>B) Triple-Alpha Process</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q5" value="C" class="mt-1 accent-amber-400">
+                <span>C) Carbon-Nitrogen-Oxygen (CNO) Cycle</span>
+              </label>
+              <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-700 bg-slate-900/50 hover:bg-slate-700 cursor-pointer transition">
+                <input type="radio" name="q5" value="D" class="mt-1 accent-amber-400">
+                <span>D) s-process neutron capture</span>
+              </label>
+            </div>
+            <div class="feedback-box hidden mt-4 p-4 rounded-lg text-sm"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Matching -->
+      <div class="print-shadow bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md page-break">
+        <h2 class="text-xl font-bold text-amber-300 border-b border-slate-700 pb-2 mb-6 flex items-center gap-2">
+          <span class="bg-slate-700 text-amber-300 w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">II</span>
+          Part B: Matching (Questions 6 - 7)
+        </h2>
+
+        <div class="space-y-8">
+          <!-- Q6 -->
+          <div class="question-block" data-qtype="M" data-qid="6">
+            <p class="font-semibold text-lg text-white mb-2">6. Match the following stages of a low-mass star's life cycle ($M \approx 1\text{ M}_\odot$) with their correct structural description.</p>
+            <p class="text-sm text-slate-400 mb-4 italic">Write the correct letter (A-D) in the box beside each term.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Terms (Answers inputted here) -->
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <input type="text" maxlength="1" id="q6-item1" class="w-10 h-10 text-center uppercase font-bold text-slate-900 bg-amber-100 border border-slate-300 rounded focus:ring-2 focus:ring-amber-500" required>
+                  <span class="text-slate-200">1. Protostar</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="text" maxlength="1" id="q6-item2" class="w-10 h-10 text-center uppercase font-bold text-slate-900 bg-amber-100 border border-slate-300 rounded focus:ring-2 focus:ring-amber-500" required>
+                  <span class="text-slate-200">2. Red Giant Branch (RGB)</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="text" maxlength="1" id="q6-item3" class="w-10 h-10 text-center uppercase font-bold text-slate-900 bg-amber-100 border border-slate-300 rounded focus:ring-2 focus:ring-amber-500" required>
+                  <span class="text-slate-200">3. Asymptotic Giant Branch (AGB)</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="text" maxlength="1" id="q6-item4" class="w-10 h-10 text-center uppercase font-bold text-slate-900 bg-amber-100 border border-slate-300 rounded focus:ring-2 focus:ring-amber-500" required>
+                  <span class="text-slate-200">4. White Dwarf</span>
+                </div>
+              </div>
+              <!-- Definitions -->
+              <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700 text-sm space-y-3">
+                <div><span class="font-bold text-amber-400">A.</span> Star fusing shell hydrogen around an inert, degenerate helium core.</div>
+                <div><span class="font-bold text-amber-400">B.</span> Extremely dense, cooling stellar ember supported by electron degeneracy.</div>
+                <div><span class="font-bold text-amber-400">C.</span> Hydrostatic equilibrium not yet reached; powered entirely by gravitational contraction.</div>
+                <div><span class="font-bold text-amber-400">D.</span> Double-shell fusing star (hydrogen & helium shells) surrounding an inert carbon-oxygen core.</div>
+              </div>
+            </div>
+            <div class="feedback-box hidden mt-4 p-4 rounded-lg text-sm"></div>
+          </div>
+
+          <!-- Q7 -->
+          <div class="question-block" data-qtype="M" data-qid="7">
+            <p class="font-semibold text-lg text-white mb-2">7. Match each astrophysical object or remnant with the primary physical limit or pressure that governs its structure.</p>
+            <p class="text-sm text-slate-400 mb-4 italic">Write the correct letter (A-D) in the box beside each term.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Terms (Answers inputted here) -->
+              <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <input type="text" maxlength="1" id="q7-item1" class="w-10 h-10 text-center uppercase font-bold text-slate-900 bg-amber-100 border border-slate-300 rounded focus:ring-2 focus:ring-amber-500" required>
+                  <span class="text-slate-200">1. White Dwarf remnant</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="text" maxlength="1" id="q7-item2" class="w-10 h-10 text-center uppercase font-bold text-slate-900 bg-amber-100 border border-slate-300 rounded focus:ring-2 focus:ring-amber-500" required>
+                  <span class="text-slate-200">2. Neutron Star remnant</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="text" maxlength="1" id="q7-item3" class="w-10 h-10 text-center uppercase font-bold text-slate-900 bg-amber-100 border border-slate-300 rounded focus:ring-2 focus:ring-amber-500" required>
+                  <span class="text-slate-200">3. Stellar-mass Black Hole</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="text" maxlength="1" id="q7-item4" class="w-10 h-10 text-center uppercase font-bold text-slate-900 bg-amber-100 border border-slate-300 rounded focus:ring-2 focus:ring-amber-500" required>
+                  <span class="text-slate-200">4. Brown Dwarf star</span>
+                </div>
+              </div>
+              <!-- Definitions -->
+              <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700 text-sm space-y-3">
+                <div><span class="font-bold text-amber-400">A.</span> Tolman-Oppenheimer-Volkoff (TOV) Limit; supported by degenerate neutron pressure.</div>
+                <div><span class="font-bold text-amber-400">B.</span> Electron degeneracy pressure preventing fusion ignition of light hydrogen.</div>
+                <div><span class="font-bold text-amber-400">C.</span> Chandrasekhar Limit; supported by degenerate electron pressure.</div>
+                <div><span class="font-bold text-amber-400">D.</span> Mass exceeding all degeneracy pressures; collapses within the Schwarzschild radius.</div>
+              </div>
+            </div>
+            <div class="feedback-box hidden mt-4 p-4 rounded-lg text-sm"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Fill in the Blanks -->
+      <div class="print-shadow bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md page-break">
+        <h2 class="text-xl font-bold text-amber-300 border-b border-slate-700 pb-2 mb-6 flex items-center gap-2">
+          <span class="bg-slate-700 text-amber-300 w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">III</span>
+          Part C: Fill in the Blank (Questions 8 - 9)
+        </h2>
+
+        <div class="space-y-8">
+          <!-- Q8 -->
+          <div class="question-block" data-qtype="FIB" data-qid="8">
+            <p class="font-semibold text-lg text-white mb-3">8. The transition of low-mass stars from the Asymptotic Giant Branch (AGB) to their white dwarf phase involves ejecting their outer stellar envelope, creating an expanding glow known as a/an <input type="text" id="q8-ans" class="bg-slate-900 text-amber-300 border border-slate-600 rounded px-3 py-1 text-center w-64 focus:ring-2 focus:ring-amber-500 outline-none" required placeholder="Type answer here">.</p>
+            <div class="feedback-box hidden mt-4 p-4 rounded-lg text-sm"></div>
+          </div>
+
+          <!-- Q9 -->
+          <div class="question-block" data-qtype="FIB" data-qid="9">
+            <p class="font-semibold text-lg text-white mb-3">9. Once a core of high-mass stars finishes burning silicon, the inert core is dominated by the element <input type="text" id="q9-ans" class="bg-slate-900 text-amber-300 border border-slate-600 rounded px-3 py-1 text-center w-48 focus:ring-2 focus:ring-amber-500 outline-none" required placeholder="Type answer here">, whose nuclear configuration possesses the highest binding energy per nucleon and cannot support further exothermic fusion.</p>
+            <div class="feedback-box hidden mt-4 p-4 rounded-lg text-sm"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Short Essay -->
+      <div class="print-shadow bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md page-break">
+        <h2 class="text-xl font-bold text-amber-300 border-b border-slate-700 pb-2 mb-6 flex items-center gap-2">
+          <span class="bg-slate-700 text-amber-300 w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">IV</span>
+          Part D: Short Essay / Written Response (Question 10)
+        </h2>
+
+        <!-- Q10 -->
+        <div class="question-block" data-qtype="SE" data-qid="10">
+          <p class="font-semibold text-lg text-white mb-3">10. Explain the role of mass in determining a star's evolutionary path. Specifically, contrast the evolutionary lifetime and ultimate structural end-state of a low-mass star ($1\text{ M}_\odot$) versus a high-mass star ($25\text{ M}_\odot$).</p>
+          <p class="text-sm text-slate-400 mb-4">Your response should address core temperatures, lifetimes, and the physical mechanisms behind their different deaths.</p>
+          <textarea id="q10-ans" rows="6" class="w-full bg-slate-900 text-slate-100 border border-slate-700 rounded-lg p-4 focus:ring-2 focus:ring-amber-500 outline-none" required placeholder="Write your short essay here... (typically 150-250 words)"></textarea>
+          <div class="feedback-box hidden mt-4 p-4 rounded-lg text-sm"></div>
+        </div>
+      </div>
+
+      <!-- Submit / Reset Actions (Hidden on Print) -->
+      <div class="flex gap-4 no-print justify-end">
+        <button type="button" onclick="resetExam()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold py-3 px-6 rounded-lg shadow-lg transition">
+          Reset Exam
+        </button>
+        <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 px-8 rounded-lg shadow-lg transition">
+          Submit Answers
+        </button>
+      </div>
+
+    </form>
+
+    <!-- Score Summary Modal (Hidden initially) -->
+    <div id="score-summary" class="hidden mt-8 p-6 bg-slate-800 border border-amber-500/50 rounded-xl shadow-xl no-print">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 bg-amber-500 text-slate-950 font-black rounded-full flex items-center justify-center text-2xl" id="final-score-badge">
+          0/40
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-white">Exam Evaluated!</h3>
+          <p class="text-slate-300 text-sm mt-1" id="grading-summary-text"></p>
+          <p class="text-xs text-slate-400 mt-2 italic">*Note: Short Essay (Question 10) must be manually evaluated by an instructor and is not added to the automatic score tally above.*</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="bg-slate-950 text-slate-500 py-6 border-t border-slate-800 text-center text-xs mt-12 no-print">
+    <div class="max-w-6xl mx-auto px-4">
+      <p>&copy; Stellar Physics Course Resource Suite. Ready for classroom deployment and LMS integration.</p>
+    </div>
+  </footer>
+
+  <!-- Script logic for evaluation, correct answers and Brightspace formatting -->
+  <script>
+    // Correct Answer keys and astrophysics rationales
+    const answers = {
+      q1: {
+        correct: "B",
+        rationale: "Hydrostatic equilibrium is sustained by the balance between outward thermal pressure from nuclear fusion reactions and the inward crush of gravitational force."
+      },
+      q2: {
+        correct: "B",
+        rationale: "Stars of 1.2 solar masses eject their outer atmospheres during giant phases and leave behind a carbon-oxygen core supported by electron degeneracy pressure."
+      },
+      q3: {
+        correct: "A",
+        rationale: "The Chandrasekhar limit (~1.4 solar masses) represents the absolute physical barrier where gravity overpowers the degeneracy pressure of relativistic electrons."
+      },
+      q4: {
+        correct: "B",
+        rationale: "Because iron-56 has the highest binding energy per nucleon, fusing it requires adding energy (endothermic) rather than releasing it, which halts the outward radiation pressure."
+      },
+      q5: {
+        correct: "C",
+        rationale: "Inside stars with core temperatures exceeding 17 million Kelvin (typically mass > 1.5 M☉), the Carbon-Nitrogen-Oxygen (CNO) cycle provides the dominant energy generation mechanism."
+      },
+      q6: {
+        items: ["C", "A", "D", "B"], // 1->C, 2->A, 3->D, 4->B
+        rationales: [
+          "Protostars are early pre-fusion collapse stages powered by gravitational potential energy.",
+          "The Red Giant Branch marks shell hydrogen fusion around an inactive, contracting helium core.",
+          "The Asymptotic Giant Branch features stars burning shells of hydrogen and helium concurrently.",
+          "White dwarfs represent the final cooling, degenerate carbon-oxygen core state of low-mass stellar evolution."
+        ]
+      },
+      q7: {
+        items: ["C", "A", "D", "B"], // 1->C, 2->A, 3->D, 4->B
+        rationales: [
+          "White dwarfs are stabilized by electron degeneracy pressure and limited by the Chandrasekhar mass limit.",
+          "Neutron stars are held up by degenerate neutron pressure up to the Tolman-Oppenheimer-Volkoff limit.",
+          "Black holes represent masses so high that no degeneracy pressure can withstand collapse, ending inside the event horizon.",
+          "Brown dwarfs are sub-stellar bodies stabilized by electron degeneracy that never ignited core hydrogen."
+        ]
+      },
+      q8: {
+        correct: ["planetary nebula", "planetary nebulae"],
+        rationale: "The stellar envelope is gently blown away during thermal pulses on the AGB, leaving behind an ionized, glowing shell of gas."
+      },
+      q9: {
+        correct: ["iron", "fe"],
+        rationale: "Iron is the endpoint of stable nucleosynthesis in high-mass stellar cores since its fusion is endothermic."
+      },
+      q10: {
+        sampleAnswer: "Initial stellar mass is the single most important parameter determining a star's lifecycle. A low-mass star ($1\\text{ M}_\\odot$) burns hydrogen slowly via the p-p chain over 10 billion years, transitioning into a red giant and dying by shedding its envelope as a planetary nebula, leaving behind a carbon-oxygen white dwarf. Conversely, a high-mass star ($25\\text{ M}_\\odot$) burns hydrogen at a breakneck pace via the CNO cycle, completing its lifecycle in mere millions of years. It burns successive heavier elements (He, C, Ne, O, Si) in shells until creating an iron core, which collapses catastrophically, creating a Core-Collapse Supernova and leaving behind a neutron star or black hole remnant.",
+        rubric: "Full credit: Must note that higher mass results in substantially higher core temperature, vastly shorter lifetimes, nuclear burning of heavier element layers, and a catastrophic supernova death vs planetary nebula death."
+      }
+    };
+
+    // Evaluates the exam interactively
+    function evaluateExam(event) {
+      event.preventDefault();
+      let score = 0;
+      let totalMax = 40; // 5 MC (5 points), 2 Matching (8 points), 2 FIB (2 points) -> Let's scale points: 4 pts each.
+
+      // Reset feedback displays
+      document.querySelectorAll('.feedback-box').forEach(box => {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+      });
+
+      // --- Part A: MC Evaluation ---
+      for (let i = 1; i <= 5; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const block = document.querySelector(`.question-block[data-qid="${i}"][data-qtype="MC"]`);
+        const fbox = block.querySelector('.feedback-box');
+        
+        const isCorrect = selected && selected.value === answers[`q${i}`].correct;
+        if (isCorrect) score += 4; // 4 points per MC
+
+        fbox.className = "feedback-box mt-4 p-4 rounded-lg text-sm " + (isCorrect ? "bg-emerald-950/80 border border-emerald-500 text-emerald-200" : "bg-rose-950/80 border border-rose-500 text-rose-200");
+        fbox.innerHTML = `
+          <div class="flex items-center gap-2 font-bold mb-1">
+            <i class="fa-solid ${isCorrect ? 'fa-circle-check text-emerald-400' : 'fa-circle-xmark text-rose-400'}"></i>
+            ${isCorrect ? 'Correct!' : 'Incorrect'}
+          </div>
+          <p><strong>Your Answer:</strong> ${selected ? selected.value : 'None'}. <strong>Correct Answer:</strong> ${answers[`q${i}`].correct}</p>
+          <p class="mt-2 text-xs italic opacity-90">${answers[`q${i}`].rationale}</p>
+        `;
+        fbox.classList.remove('hidden');
+      }
+
+      // --- Part B: Matching Q6 & Q7 ---
+      [6, 7].forEach(qNum => {
+        const block = document.querySelector(`.question-block[data-qid="${qNum}"][data-qtype="M"]`);
+        const fbox = block.querySelector('.feedback-box');
+        let qCorrectCount = 0;
+        let breakdownHTML = '';
+
+        for (let idx = 1; idx <= 4; idx++) {
+          const val = document.getElementById(`q${qNum}-item${idx}`).value.trim().toUpperCase();
+          const expected = answers[`q${qNum}`].items[idx - 1];
+          const isItemCorrect = val === expected;
+          if (isItemCorrect) {
+            qCorrectCount++;
+            score += 1; // 1 point per match
+          }
+          breakdownHTML += `<li class="mt-1">Item ${idx}: ${isItemCorrect ? '<span class="text-emerald-400">✓ Correct</span>' : `<span class="text-rose-400">✗ Incorrect (Entered: ${val || "None"}, Expected: ${expected})</span>`} — <span class="text-xs opacity-80">${answers[`q${qNum}`].rationales[idx-1]}</span></li>`;
+        }
+
+        fbox.className = "feedback-box mt-4 p-4 rounded-lg text-sm " + (qCorrectCount === 4 ? "bg-emerald-950/80 border border-emerald-500 text-emerald-200" : "bg-amber-950/80 border border-amber-600/50 text-amber-200");
+        fbox.innerHTML = `
+          <div class="font-bold flex items-center gap-2 mb-2">
+            <i class="fa-solid ${qCorrectCount === 4 ? 'fa-circle-check text-emerald-400' : 'fa-triangle-exclamation text-amber-400'}"></i>
+            Matching Breakdown (${qCorrectCount}/4 matches correct)
+          </div>
+          <ul class="list-disc pl-5 text-xs space-y-1">${breakdownHTML}</ul>
+        `;
+        fbox.classList.remove('hidden');
+      });
+
+      // --- Part C: Fill in the Blanks Q8 & Q9 ---
+      [8, 9].forEach(qNum => {
+        const block = document.querySelector(`.question-block[data-qid="${qNum}"][data-qtype="FIB"]`);
+        const fbox = block.querySelector('.feedback-box');
+        const val = document.getElementById(`q${qNum}-ans`).value.trim().toLowerCase();
+        
+        const isCorrect = answers[`q${qNum}`].correct.includes(val);
+        if (isCorrect) score += 4; // 4 points per FIB
+
+        fbox.className = "feedback-box mt-4 p-4 rounded-lg text-sm " + (isCorrect ? "bg-emerald-950/80 border border-emerald-500 text-emerald-200" : "bg-rose-950/80 border border-rose-500 text-rose-200");
+        fbox.innerHTML = `
+          <div class="flex items-center gap-2 font-bold mb-1">
+            <i class="fa-solid ${isCorrect ? 'fa-circle-check text-emerald-400' : 'fa-circle-xmark text-rose-400'}"></i>
+            ${isCorrect ? 'Correct!' : 'Incorrect'}
+          </div>
+          <p><strong>Your Answer:</strong> "${val}". <strong>Accepted Answers:</strong> ${answers[`q${qNum}`].correct.join(', ')}</p>
+          <p class="mt-2 text-xs italic opacity-90">${answers[`q${qNum}`].rationale}</p>
+        `;
+        fbox.classList.remove('hidden');
+      });
+
+      // --- Part D: Short Essay Q10 ---
+      const q10Block = document.querySelector(`.question-block[data-qid="10"][data-qtype="SE"]`);
+      const q10Fbox = q10Block.querySelector('.feedback-box');
+      q10Fbox.className = "feedback-box mt-4 p-4 rounded-lg text-sm bg-slate-900 border border-amber-500/50 text-slate-100";
+      q10Fbox.innerHTML = `
+        <div class="font-bold text-amber-400 flex items-center gap-2 mb-2">
+          <i class="fa-solid fa-graduation-cap"></i> Essay Grading Rubric & Reference Standard
+        </div>
+        <p class="mb-3"><strong>Reference Exemplar Answer:</strong> ${answers.q10.sampleAnswer}</p>
+        <p class="text-xs text-amber-300"><strong>Grading Criteria:</strong> ${answers.q10.rubric}</p>
+      `;
+      q10Fbox.classList.remove('hidden');
+
+      // Update aggregate report badge
+      const badge = document.getElementById('final-score-badge');
+      const text = document.getElementById('grading-summary-text');
+      badge.innerHTML = `${score}/36`;
+      
+      const pct = (score / 36) * 100;
+      if (pct >= 90) {
+        text.innerHTML = `Excellent! You scored ${pct.toFixed(1)}% which shows masterful command of astrophysical mechanics and nuclear reactions!`;
+      } else if (pct >= 70) {
+        text.innerHTML = `Good job! You scored ${pct.toFixed(1)}%. Review thermodynamic pressures and nuclear capture phases to perfect your knowledge.`;
+      } else {
+        text.innerHTML = `Score: ${pct.toFixed(1)}%. Stellar astrophysics can be challenging; review hydrostatic equilibrium and core composition cycles.`;
+      }
+      
+      document.getElementById('score-summary').classList.remove('hidden');
+      document.getElementById('score-summary').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Resets the exam to pristine state
+    function resetExam() {
+      document.getElementById('exam-form').reset();
+      document.querySelectorAll('.feedback-box').forEach(box => {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+      });
+      document.getElementById('score-summary').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Compiles the quiz metadata into Brightspace standard CSV format
+    function downloadBrightspaceCSV() {
+      let csvContent = "";
+
+      // Q1 (MC)
+      csvContent += "NewQuestion,MC\n";
+      csvContent += "ID,\n";
+      csvContent += "Title,Hydrostatic Equilibrium\n";
+      csvContent += "QuestionText,Which force is primarily responsible for holding a main-sequence star in hydrostatic equilibrium against the inward pull of gravity?\n";
+      csvContent += "Option,0,Strong nuclear force within atomic nuclei\n";
+      csvContent += "Option,100,Outward thermal pressure generated by core fusion\n";
+      csvContent += "Option,0,Electron degeneracy pressure of a crystalline carbon core\n";
+      csvContent += "Option,0,Degenerate neutron pressure opposing gravitational collapse\n";
+      csvContent += "Feedback,Outward thermal pressure counters gravity; electron degeneracy acts in white dwarfs and neutron degeneracy in neutron stars.\n\n";
+
+      // Q2 (MC)
+      csvContent += "NewQuestion,MC\n";
+      csvContent += "ID,\n";
+      csvContent += "Title,Stellar Remnant Mass\n";
+      csvContent += "QuestionText,What stellar remnant will be produced at the end of the life cycle of a star with an initial main-sequence mass of 1.2 solar masses?\n";
+      csvContent += "Option,0,Neutron star\n";
+      csvContent += "Option,100,Carbon-oxygen white dwarf\n";
+      csvContent += "Option,0,Stellar-mass black hole\n";
+      csvContent += "Option,0,Helium white dwarf\n";
+      csvContent += "Feedback,Low-mass stars with M < 8 solar masses culminate as carbon-oxygen white dwarfs.\n\n";
+
+      // Q3 (MC)
+      csvContent += "NewQuestion,MC\n";
+      csvContent += "ID,\n";
+      csvContent += "Title,Chandrasekhar Limit\n";
+      csvContent += "QuestionText,At what critical threshold is the Chandrasekhar limit defined and why is it structurally significant?\n";
+      csvContent += "Option,100,1.4 solar masses: The maximum mass that can be supported by electron degeneracy pressure.\n";
+      csvContent += "Option,0,3.0 solar masses: The boundary between neutron stars and black holes.\n";
+      csvContent += "Option,0,8.0 solar masses: The mass limit above which stars end their lives as type II supernovae.\n";
+      csvContent += "Option,0,0.08 solar masses: The mass needed to trigger hydrogen fusion in brown dwarfs.\n";
+      csvContent += "Feedback,A white dwarf with a mass exceeding 1.4 solar masses can no longer support itself against gravity.\n\n";
+
+      // Q4 (MC)
+      csvContent += "NewQuestion,MC\n";
+      csvContent += "ID,\n";
+      csvContent += "Title,Iron Core Collapse\n";
+      csvContent += "QuestionText,Why does fusion of iron (Fe-56) within massive stars trigger core collapse rather than sustaining stellar stability?\n";
+      csvContent += "Option,0,Iron fusion is highly exothermic causing an explosion that blasts the outer layers into space.\n";
+      csvContent += "Option,100,Iron nuclei fuse via endothermic processes consuming rather than generating core thermal energy.\n";
+      csvContent += "Option,0,Iron acts as a catalyst that forces instant carbon burning throughout the convective layers.\n";
+      csvContent += "Option,0,Iron decreases the core density so rapidly that gravitational force falls to near zero.\n";
+      csvContent += "Feedback,Because iron-56 fusion is endothermic, it drains the core of heat and vital pressure.\n\n";
+
+      // Q5 (MC)
+      csvContent += "NewQuestion,MC\n";
+      csvContent += "ID,\n";
+      csvContent += "Title,CNO Cycle\n";
+      csvContent += "QuestionText,Which nucleosynthesis pathway dominates hydrogen fusion inside massive stars during their main-sequence lifetime?\n";
+      csvContent += "Option,0,Proton-Proton (p-p) Chain\n";
+      csvContent += "Option,0,Triple-Alpha Process\n";
+      csvContent += "Option,100,Carbon-Nitrogen-Oxygen (CNO) Cycle\n";
+      csvContent += "Option,0,s-process neutron capture\n";
+      csvContent += "Feedback,For stars heavier than 1.5 solar masses, the CNO cycle is highly dominant.\n\n";
+
+      // Q6 (M)
+      csvContent += "NewQuestion,M\n";
+      csvContent += "ID,\n";
+      csvContent += "Title,Stellar Stages\n";
+      csvContent += "QuestionText,Match low-mass stellar evolution stages to description.\n";
+      csvContent += "Choice,Protostar,Hydrostatic equilibrium not yet reached; powered entirely by gravitational contraction.\n";
+      csvContent += "Choice,Red Giant Branch (RGB),Star fusing shell hydrogen around an inert degenerate helium core.\n";
+      csvContent += "Choice,Asymptotic Giant Branch (AGB),Double-shell fusing star surrounding an inert carbon-oxygen core.\n";
+      csvContent += "Choice,White Dwarf,Extremely dense cooling stellar ember supported by electron degeneracy.\n\n";
+
+      // Q7 (M)
+      csvContent += "NewQuestion,M\n";
+      csvContent += "ID,\n";
+      csvContent += "Title,Stellar Physics Limits\n";
+      csvContent += "QuestionText,Match astronomical objects to their physical limits.\n";
+      csvContent += "Choice,White Dwarf remnant,Chandrasekhar Limit; supported by degenerate electron pressure.\n";
+      csvContent += "Choice,Neutron Star remnant,Tolman-Oppenheimer-Volkoff (TOV) Limit; supported by degenerate neutron pressure.\n";
+      csvContent += "Choice,Stellar-mass Black Hole,Mass exceeding all degeneracy pressures; collapses within the Schwarzschild radius.\n";
+      csvContent += "Choice,Brown Dwarf star,Electron degeneracy pressure preventing fusion ignition of light hydrogen.\n\n";
+
+      // Q8 (SA)
+      csvContent += "NewQuestion,SA\n";
+      csvContent += "ID,\n";
+      csvContent += "Title,Planetary Nebula Remnant\n";
+      csvContent += "QuestionText,The transition of low-mass stars from the Asymptotic Giant Branch (AGB) to white dwarf phase ejects their outer stellar envelope creating an expanding glow known as a:\n";
+      csvContent += "Answer,planetary nebula\n";
+      csvContent += "Answer,planetary nebulae\n\n";
+
+      // Q9 (SA)
+      csvContent += "NewQuestion,SA\n";
+      csvContent += "ID,\n";
+      csvContent += "Title,Iron Nucleosynthesis Endstate\n";
+      csvContent += "QuestionText,Once a core of high-mass stars finishes burning silicon, the inert core is dominated by what element?\n";
+      csvContent += "Answer,iron\n";
+      csvContent += "Answer,fe\n\n";
+
+      // Q10 (WR)
+      csvContent += "NewQuestion,WR\n";
+      csvContent += "ID,\n";
+      csvContent += "Title,Mass Role in Stellar Evolution\n";
+      csvContent += "QuestionText,Explain the role of mass in determining a star's evolutionary path. Contrast low-mass (1 M☉) vs high-mass (25 M☉) stellar lifespans and deaths.\n";
+      csvContent += "AnswerKey,Full credit requires explaining core temperature differences, fusion pathways (PP-chain vs CNO cycle and subsequent shells), lifetimes (billions vs millions of years), and final fates (planetary nebula and white dwarf vs core collapse supernova and neutron star/black hole).\n";
+
+      // Trigger standard web download
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "Stellar_Evolution_Brightspace_Bank.csv");
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>
