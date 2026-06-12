@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Prompt Generator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink:       #1a1a2e;
+    --slate:     #2d3561;
+    --accent:    #e8a838;
+    --accent2:   #4ecdc4;
+    --surface:   #f7f6f2;
+    --card:      #ffffff;
+    --border:    #e2e0d8;
+    --muted:     #6b7080;
+    --tag-bg:    #eef6f5;
+    --tag-fg:    #1a6e68;
+    --success:   #2ecc71;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--surface);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--accent);
+    height: 68px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  header .brand-icon {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: #fff;
+    letter-spacing: .01em;
+  }
+  header .subtitle {
+    font-size: .72rem;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .step-tracker {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.25);
+    transition: background .3s;
+  }
+  .step-dot.active { background: var(--accent); }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  /* ── FORM PANEL ── */
+  .form-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .section-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .section-card.highlighted { border-color: var(--accent2); }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .85rem 1.2rem;
+    background: var(--ink);
+    cursor: pointer;
+    user-select: none;
+  }
+  .card-header .num {
+    width: 22px; height: 22px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .65rem;
+    font-weight: 700;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+  .card-header h2 {
+    font-size: .85rem;
+    font-weight: 600;
+    color: #fff;
+    flex: 1;
+    letter-spacing: .02em;
+  }
+  .card-header .chevron {
+    color: rgba(255,255,255,.5);
+    font-size: .8rem;
+    transition: transform .25s;
+  }
+  .card-header.open .chevron { transform: rotate(180deg); }
+
+  .card-body {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+  }
+  .card-body.collapsed { display: none; }
+
+  label {
+    display: block;
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--slate);
+    margin-bottom: .35rem;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+  }
+  .hint {
+    font-size: .72rem;
+    color: var(--muted);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: .3rem;
+  }
+
+  input[type="text"],
+  textarea,
+  select {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: .875rem;
+    padding: .6rem .85rem;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--ink);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input[type="text"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--accent2);
+    box-shadow: 0 0 0 3px rgba(78,205,196,.12);
+    background: #fff;
+  }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.55; }
+
+  /* Tag input */
+  .tag-input-wrap {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    padding: .45rem .65rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    cursor: text;
+    transition: border-color .2s, box-shadow .2s;
+    min-height: 42px;
+  }
+  .tag-input-wrap:focus-within {
+    border-color: var(--accent2);
+    box-shadow: 0 0 0 3px rgba(78,205,196,.12);
+    background: #fff;
+  }
+  .tag {
+    background: var(--tag-bg);
+    color: var(--tag-fg);
+    border-radius: 6px;
+    padding: .18rem .55rem;
+    font-size: .78rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    white-space: nowrap;
+  }
+  .tag button {
+    background: none; border: none; cursor: pointer;
+    color: var(--tag-fg); font-size: .9rem; line-height: 1;
+    padding: 0 1px;
+    opacity: .65;
+  }
+  .tag button:hover { opacity: 1; }
+  .tag-text-input {
+    border: none; outline: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: .875rem;
+    color: var(--ink);
+    min-width: 120px;
+    flex: 1;
+  }
+
+  /* Activity checkboxes */
+  .activity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem;
+  }
+  .activity-item {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: .6rem .8rem;
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    background: var(--surface);
+  }
+  .activity-item:hover { background: #fff; border-color: var(--accent2); }
+  .activity-item.checked { background: var(--tag-bg); border-color: var(--accent2); }
+  .activity-item input[type="checkbox"] { display: none; }
+  .activity-item .check-icon {
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: .65rem;
+    color: transparent;
+    transition: all .2s;
+    background: #fff;
+  }
+  .activity-item.checked .check-icon {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: #fff;
+  }
+  .activity-item .act-label {
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--slate);
+  }
+
+  /* ── PREVIEW PANEL ── */
+  .preview-panel {
+    position: sticky;
+    top: 86px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .preview-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .preview-header {
+    padding: .85rem 1.2rem;
+    background: var(--slate);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .preview-header h3 {
+    font-size: .8rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .live-badge {
+    font-size: .6rem;
+    background: var(--success);
+    color: #fff;
+    padding: .1rem .4rem;
+    border-radius: 4px;
+    letter-spacing: .05em;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .6; }
+  }
+
+  .char-count {
+    font-size: .72rem;
+    color: rgba(255,255,255,.5);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  #prompt-output {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .76rem;
+    line-height: 1.7;
+    padding: 1.2rem;
+    color: var(--ink);
+    min-height: 280px;
+    max-height: 500px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  #prompt-output .ph { color: var(--muted); font-style: italic; }
+  #prompt-output .section-label {
+    color: var(--slate);
+    font-weight: 700;
+    font-size: .78rem;
+  }
+  #prompt-output .value { color: var(--tag-fg); }
+  #prompt-output .tag-inline {
+    background: var(--tag-bg);
+    color: var(--tag-fg);
+    border-radius: 3px;
+    padding: 0 3px;
+    font-size: .73rem;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: .6rem;
+    padding: .9rem 1.2rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .55rem 1rem;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: .8rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+    letter-spacing: .02em;
+  }
+  .btn-copy {
+    background: var(--accent);
+    color: var(--ink);
+    flex: 1;
+    justify-content: center;
+  }
+  .btn-copy:hover { background: #d4942e; transform: translateY(-1px); }
+  .btn-copy.copied { background: var(--success); color: #fff; }
+  .btn-clear {
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+  }
+  .btn-clear:hover { border-color: #c0392b; color: #c0392b; }
+
+  /* Tone selector */
+  .tone-row {
+    display: flex;
+    gap: .4rem;
+    flex-wrap: wrap;
+  }
+  .tone-btn {
+    padding: .3rem .75rem;
+    border-radius: 20px;
+    font-size: .75rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    transition: all .2s;
+  }
+  .tone-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .tone-btn.active { background: var(--ink); border-color: var(--ink); color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    .container {
+      grid-template-columns: 1fr;
+    }
+    .preview-panel { position: static; }
+    .activity-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-icon">📚</div>
+    <div>
+      <h1>Lesson Prompt Generator</h1>
+      <div class="subtitle">Community College Edition</div>
+    </div>
+  </div>
+  <div class="step-tracker" id="step-tracker">
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ── FORM ── -->
+  <div class="form-panel">
+
+    <!-- Section 1: Core Info -->
+    <div class="section-card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <div class="num">1</div>
+        <h2>Lesson Overview</h2>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="card-body">
+        <div>
+          <label>Lesson Title <span class="hint">required</span></label>
+          <input type="text" id="title" placeholder="e.g. Introduction to Cellular Respiration" oninput="buildPrompt()">
+        </div>
+        <div>
+          <label>Course / Subject</label>
+          <input type="text" id="course" placeholder="e.g. Biology 101, Introduction to Microeconomics" oninput="buildPrompt()">
+        </div>
+        <div>
+          <label>Target Audience</label>
+          <div style="display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:.5rem;" id="audience-presets">
+            <button class="tone-btn" onclick="setAudience(this, 'First-semester community college students')">Freshmen</button>
+            <button class="tone-btn" onclick="setAudience(this, 'Second-year community college students')">Sophomores</button>
+            <button class="tone-btn" onclick="setAudience(this, 'Returning adult learners with varied prior knowledge')">Adult Learners</button>
+            <button class="tone-btn" onclick="setAudience(this, 'Dual-enrollment high school students')">Dual Enrollment</button>
+          </div>
+          <input type="text" id="audience" placeholder="Or describe your audience here…" oninput="buildPrompt(); clearAudiencePresets()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Objectives & Topics -->
+    <div class="section-card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <div class="num">2</div>
+        <h2>Objectives &amp; Topics</h2>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="card-body">
+        <div>
+          <label>Learning Objectives <span class="hint">one per line</span></label>
+          <textarea id="objectives" rows="4" placeholder="Students will be able to:&#10;• Explain the three stages of cellular respiration&#10;• Compare aerobic and anaerobic processes&#10;• Calculate ATP yield" oninput="buildPrompt()"></textarea>
+        </div>
+        <div>
+          <label>Topics Covered <span class="hint">press Enter or comma to add</span></label>
+          <div class="tag-input-wrap" id="topics-wrap" onclick="focusTagInput('topics-input')">
+            <input class="tag-text-input" id="topics-input" placeholder="Type a topic and press Enter…" onkeydown="handleTagKey(event,'topics')" oninput="buildPrompt()">
+          </div>
+        </div>
+        <div>
+          <label>Key Terms / Vocabulary <span class="hint">press Enter or comma to add</span></label>
+          <div class="tag-input-wrap" id="terms-wrap" onclick="focusTagInput('terms-input')">
+            <input class="tag-text-input" id="terms-input" placeholder="Type a term and press Enter…" onkeydown="handleTagKey(event,'terms')" oninput="buildPrompt()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Activities -->
+    <div class="section-card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <div class="num">3</div>
+        <h2>Activity Types</h2>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="card-body">
+        <p style="font-size:.78rem;color:var(--muted);">Select all activity types to include in the lesson plan:</p>
+        <div class="activity-grid" id="activity-grid">
+          <label class="activity-item" onclick="toggleActivity(this)">
+            <input type="checkbox" value="Interactive learning activities (polls, simulations, think-pair-share)">
+            <div class="check-icon">✓</div>
+            <span class="act-label">🎮 Interactive Learning</span>
+          </label>
+          <label class="activity-item" onclick="toggleActivity(this)">
+            <input type="checkbox" value="Team/group projects with defined roles">
+            <div class="check-icon">✓</div>
+            <span class="act-label">👥 Team Projects</span>
+          </label>
+          <label class="activity-item" onclick="toggleActivity(this)">
+            <input type="checkbox" value="Case studies with discussion questions">
+            <div class="check-icon">✓</div>
+            <span class="act-label">📋 Case Studies</span>
+          </label>
+          <label class="activity-item" onclick="toggleActivity(this)">
+            <input type="checkbox" value="Hands-on lab exercises">
+            <div class="check-icon">✓</div>
+            <span class="act-label">🔬 Labs</span>
+          </label>
+          <label class="activity-item" onclick="toggleActivity(this)">
+            <input type="checkbox" value="Formative and summative assessments (quizzes, rubrics)">
+            <div class="check-icon">✓</div>
+            <span class="act-label">📝 Assessments</span>
+          </label>
+          <label class="activity-item" onclick="toggleActivity(this)">
+            <input type="checkbox" value="Flipped classroom pre-reading or video assignments">
+            <div class="check-icon">✓</div>
+            <span class="act-label">🎥 Flipped Classroom</span>
+          </label>
+          <label class="activity-item" onclick="toggleActivity(this)">
+            <input type="checkbox" value="Exit tickets for quick comprehension checks">
+            <div class="check-icon">✓</div>
+            <span class="act-label">🎫 Exit Tickets</span>
+          </label>
+          <label class="activity-item" onclick="toggleActivity(this)">
+            <input type="checkbox" value="Socratic seminars / guided discussion">
+            <div class="check-icon">✓</div>
+            <span class="act-label">💬 Socratic Seminars</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Context & Tone -->
+    <div class="section-card">
+      <div class="card-header open" onclick="toggleCard(this)">
+        <div class="num">4</div>
+        <h2>Analogies &amp; Real-World Examples</h2>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="card-body">
+        <div>
+          <label>Analogies to Use</label>
+          <textarea id="analogies" rows="2" placeholder="e.g. Compare the cell membrane to a nightclub bouncer that decides who gets in and out" oninput="buildPrompt()"></textarea>
+        </div>
+        <div>
+          <label>Real-World Examples / Applications</label>
+          <textarea id="examples" rows="2" placeholder="e.g. Link ATP production to why athletes carb-load before races; oxygen debt after sprinting" oninput="buildPrompt()"></textarea>
+        </div>
+        <div>
+          <label>Lesson Duration</label>
+          <select id="duration" onchange="buildPrompt()">
+            <option value="">— Select duration —</option>
+            <option>50 minutes (standard lecture)</option>
+            <option>75 minutes (extended lecture)</option>
+            <option>2.5 hours (lab/studio session)</option>
+            <option>One week module</option>
+            <option>Custom (specified in notes)</option>
+          </select>
+        </div>
+        <div>
+          <label>Additional Notes / Special Requirements</label>
+          <textarea id="notes" rows="2" placeholder="e.g. Accommodate students with no prior chemistry background; include accessibility notes" oninput="buildPrompt()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Output Tone -->
+    <div class="section-card highlighted">
+      <div class="card-header open" style="background:var(--slate);" onclick="toggleCard(this)">
+        <div class="num">5</div>
+        <h2>Output Style</h2>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="card-body">
+        <label>Tone of Generated Lesson</label>
+        <div class="tone-row" id="tone-row">
+          <button class="tone-btn active" onclick="setTone(this,'academic and structured')">📐 Academic</button>
+          <button class="tone-btn" onclick="setTone(this,'engaging and conversational')">💬 Conversational</button>
+          <button class="tone-btn" onclick="setTone(this,'hands-on and practical')">🔧 Practical</button>
+          <button class="tone-btn" onclick="setTone(this,'research-driven with citations')">📖 Research-Driven</button>
+          <button class="tone-btn" onclick="setTone(this,'Socratic and inquiry-based')">🤔 Inquiry-Based</button>
+        </div>
+        <label style="margin-top:.5rem;">Output Format</label>
+        <select id="format" onchange="buildPrompt()">
+          <option value="a detailed lesson plan with sections for each phase">Full Lesson Plan</option>
+          <option value="a slide-by-slide outline with speaker notes">Slide Outline with Notes</option>
+          <option value="a student-facing handout or worksheet">Student Handout</option>
+          <option value="a facilitator guide with timing cues">Facilitator Guide</option>
+          <option value="a full set of materials including lesson plan, slides outline, and assessment">Complete Material Set</option>
+        </select>
+      </div>
+    </div>
+
+  </div><!-- /form-panel -->
+
+  <!-- ── PREVIEW ── -->
+  <div class="preview-panel">
+    <div class="preview-card">
+      <div class="preview-header">
+        <h3>Generated Prompt <span class="live-badge">LIVE</span></h3>
+        <span class="char-count" id="char-count">0 chars</span>
+      </div>
+      <div id="prompt-output"><span class="ph">Fill in the fields on the left to build your AI prompt. It will appear here in real time.</span></div>
+      <div class="btn-row">
+        <button class="btn btn-copy" id="copy-btn" onclick="copyPrompt()">📋 Copy Prompt</button>
+        <button class="btn btn-clear" onclick="clearAll()">✕ Clear</button>
+      </div>
+    </div>
+
+    <!-- Platform hints -->
+    <div class="section-card">
+      <div class="card-header open" style="background:var(--slate);" onclick="toggleCard(this)">
+        <div class="num">💡</div>
+        <h2>Paste Into Any AI Platform</h2>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="card-body" style="gap:.5rem;">
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6;">Copy the prompt above and paste directly into:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+          <span style="background:#f0f4ff;color:#3b5bdb;padding:.25rem .6rem;border-radius:6px;font-size:.75rem;font-weight:600;">Claude</span>
+          <span style="background:#f0fff4;color:#2f7c57;padding:.25rem .6rem;border-radius:6px;font-size:.75rem;font-weight:600;">ChatGPT</span>
+          <span style="background:#fff7e6;color:#c0501a;padding:.25rem .6rem;border-radius:6px;font-size:.75rem;font-weight:600;">Gemini</span>
+          <span style="background:#fdf0ff;color:#7c3aed;padding:.25rem .6rem;border-radius:6px;font-size:.75rem;font-weight:600;">Copilot</span>
+          <span style="background:#fff0f0;color:#c0392b;padding:.25rem .6rem;border-radius:6px;font-size:.75rem;font-weight:600;">Perplexity</span>
+        </div>
+        <p style="font-size:.73rem;color:var(--muted);margin-top:.4rem;line-height:1.6;">💡 <strong>Tip:</strong> For best results, paste into a new conversation and allow the AI to ask clarifying questions before generating the full lesson.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── State ──
+  const tags = { topics: [], terms: [] };
+  let currentTone = 'academic and structured';
+
+  // ── Card toggle ──
+  function toggleCard(header) {
+    header.classList.toggle('open');
+    const body = header.nextElementSibling;
+    body.classList.toggle('collapsed');
+  }
+
+  // ── Tag system ──
+  function handleTagKey(e, group) {
+    const input = e.target;
+    const val = input.value.trim().replace(/,$/, '');
+    if ((e.key === 'Enter' || e.key === ',') && val) {
+      e.preventDefault();
+      addTag(group, val);
+      input.value = '';
+      buildPrompt();
+    } else if (e.key === 'Backspace' && !input.value && tags[group].length) {
+      removeTag(group, tags[group].length - 1);
+      buildPrompt();
+    }
+  }
+
+  function addTag(group, val) {
+    if (tags[group].includes(val)) return;
+    tags[group].push(val);
+    renderTags(group);
+  }
+
+  function removeTag(group, idx) {
+    tags[group].splice(idx, 1);
+    renderTags(group);
+    buildPrompt();
+  }
+
+  function renderTags(group) {
+    const wrap = document.getElementById(group + '-wrap');
+    const input = document.getElementById(group + '-input');
+    // Remove existing tags
+    wrap.querySelectorAll('.tag').forEach(t => t.remove());
+    // Re-add before input
+    tags[group].forEach((t, i) => {
+      const span = document.createElement('span');
+      span.className = 'tag';
+      span.innerHTML = `${t}<button onclick="removeTag('${group}',${i})" title="Remove">×</button>`;
+      wrap.insertBefore(span, input);
+    });
+  }
+
+  function focusTagInput(id) { document.getElementById(id).focus(); }
+
+  // ── Activity toggle ──
+  function toggleActivity(label) {
+    label.classList.toggle('checked');
+    buildPrompt();
+    updateStepDots();
+  }
+
+  // ── Tone ──
+  function setTone(btn, tone) {
+    document.querySelectorAll('#tone-row .tone-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentTone = tone;
+    buildPrompt();
+  }
+
+  // ── Audience presets ──
+  function setAudience(btn, val) {
+    document.querySelectorAll('#audience-presets .tone-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('audience').value = val;
+    buildPrompt();
+  }
+  function clearAudiencePresets() {
+    document.querySelectorAll('#audience-presets .tone-btn').forEach(b => b.classList.remove('active'));
+  }
+
+  // ── Build Prompt ──
+  function buildPrompt() {
+    updateStepDots();
+
+    const title     = v('title');
+    const course    = v('course');
+    const audience  = v('audience');
+    const objectives= v('objectives');
+    const analogies = v('analogies');
+    const examples  = v('examples');
+    const duration  = v('duration');
+    const notes     = v('notes');
+    const format    = document.getElementById('format').value;
+
+    const activities = [...document.querySelectorAll('#activity-grid .activity-item.checked input')]
+                         .map(i => i.value);
+
+    // Build prompt string
+    let lines = [];
+
+    lines.push(`You are an experienced community college professor. Create ${format} for the following lesson.`);
+    lines.push('');
+
+    if (title)    { lines.push(`LESSON TITLE: ${title}`); }
+    if (course)   { lines.push(`COURSE: ${course}`); }
+    if (audience) { lines.push(`AUDIENCE: ${audience}`); }
+    if (duration) { lines.push(`DURATION: ${duration}`); }
+
+    if (objectives) {
+      lines.push('');
+      lines.push('LEARNING OBJECTIVES:');
+      objectives.split('\n').filter(l=>l.trim()).forEach(l => lines.push(`  ${l.trim()}`));
+    }
+
+    if (tags.topics.length) {
+      lines.push('');
+      lines.push(`TOPICS COVERED: ${tags.topics.join(' | ')}`);
+    }
+
+    if (tags.terms.length) {
+      lines.push('');
+      lines.push(`KEY TERMS TO DEFINE AND USE: ${tags.terms.join(', ')}`);
+    }
+
+    if (activities.length) {
+      lines.push('');
+      lines.push('ACTIVITY TYPES TO INCLUDE:');
+      activities.forEach(a => lines.push(`  • ${a}`));
+    }
+
+    if (analogies) {
+      lines.push('');
+      lines.push('ANALOGIES TO INCORPORATE:');
+      lines.push(`  ${analogies}`);
+    }
+
+    if (examples) {
+      lines.push('');
+      lines.push('REAL-WORLD EXAMPLES / APPLICATIONS:');
+      lines.push(`  ${examples}`);
+    }
+
+    lines.push('');
+    lines.push(`TONE AND STYLE: ${currentTone}`);
+
+    if (notes) {
+      lines.push('');
+      lines.push('SPECIAL REQUIREMENTS / NOTES:');
+      lines.push(`  ${notes}`);
+    }
+
+    lines.push('');
+    lines.push('INSTRUCTIONS FOR THE AI:');
+    lines.push('  1. Use Bloom\'s Taxonomy to scaffold activities from lower to higher order thinking.');
+    lines.push('  2. Include clear timing estimates for each activity or phase.');
+    lines.push('  3. Provide differentiation strategies for diverse learners.');
+    lines.push('  4. Align all activities directly to the stated learning objectives.');
+    lines.push('  5. Use the provided analogies and real-world examples naturally within the lesson.');
+    if (tags.terms.length) {
+      lines.push('  6. Highlight key terms in bold the first time they appear.');
+    }
+
+    const prompt = lines.join('\n');
+    const isEmpty = !title && !course && !audience && !objectives
+                    && !tags.topics.length && !tags.terms.length
+                    && !activities.length && !analogies && !examples;
+
+    const out = document.getElementById('prompt-output');
+    if (isEmpty) {
+      out.innerHTML = '<span class="ph">Fill in the fields on the left to build your AI prompt. It will appear here in real time.</span>';
+      document.getElementById('char-count').textContent = '0 chars';
+      return;
+    }
+
+    // Syntax-highlight the output
+    out.textContent = prompt;
+    document.getElementById('char-count').textContent = prompt.length.toLocaleString() + ' chars';
+  }
+
+  function v(id) {
+    return (document.getElementById(id)?.value || '').trim();
+  }
+
+  // ── Copy ──
+  function copyPrompt() {
+    const out = document.getElementById('prompt-output');
+    const text = out.textContent;
+    if (!text || text.includes('Fill in the fields')) return;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.classList.add('copied');
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = '📋 Copy Prompt';
+      }, 2200);
+    });
+  }
+
+  // ── Clear ──
+  function clearAll() {
+    ['title','course','audience','objectives','analogies','examples','notes'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    tags.topics = []; tags.terms = [];
+    renderTags('topics'); renderTags('terms');
+    document.querySelectorAll('.activity-item.checked').forEach(el => el.classList.remove('checked'));
+    document.getElementById('duration').value = '';
+    document.getElementById('format').selectedIndex = 0;
+    document.querySelectorAll('.tone-btn.active').forEach(b => b.classList.remove('active'));
+    document.querySelector('#tone-row .tone-btn').classList.add('active');
+    currentTone = 'academic and structured';
+    document.querySelectorAll('#audience-presets .tone-btn').forEach(b => b.classList.remove('active'));
+    buildPrompt();
+  }
+
+  // ── Step dots (simple fill progress) ──
+  function updateStepDots() {
+    const filled = [
+      !!(v('title') || v('course')),
+      !!(v('objectives') || tags.topics.length || tags.terms.length),
+      !!document.querySelector('.activity-item.checked'),
+      !!(v('analogies') || v('examples')),
+      true
+    ];
+    document.querySelectorAll('.step-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', filled[i]);
+    });
+  }
+
+  // Init
+  buildPrompt();
+</script>
+</body>
+</html>
