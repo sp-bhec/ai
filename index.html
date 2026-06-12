@@ -4,504 +4,772 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sagar Paudel | Dean of STEM - Hill College</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome for Academic & STEM Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
+    <!-- Google Fonts for premium typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+        :root {
+            --primary: #1e3a8a;       /* Deep Academic Navy */
+            --primary-light: #3b82f6; /* Slate Blue Accent */
+            --accent: #0284c7;        /* Crisp Sky Blue Theme Accent */
+            --accent-light: #e0f2fe;  /* Soft Sky Tint */
+            --dark: #0f172a;          /* Rich Obsidian Slate */
+            --light: #f0f9ff;         /* Soft Blue-tinted White */
+            --border: #bae6fd;        /* Subtle Blue Border */
+            --text-muted: #64748b;    /* Elegant Grey for Subtexts */
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .serif-title {
-            font-family: 'Playfair Display', serif;
+
+        /* Basic Reset & Base Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            color: var(--dark);
+            background-color: var(--light);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(2, 132, 199, 0.05) 0px, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Container Limiters */
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 0;
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-light);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary-light);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hero / Header Section */
+        header {
+            background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
+            color: white;
+            padding: 90px 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid var(--accent);
+        }
+
+        /* Animated Grid Overlay in Header */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .title-pre {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+        }
+
+        .institution-badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #93c5fd;
+            margin-top: 12px;
+        }
+
+        /* Main Section Content */
+        main {
+            padding: 60px 0;
+            flex-grow: 1;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Premium Profile Card styles */
+        .card {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .card-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 45px;
+            height: 3px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+
+        .lead-text {
+            font-size: 1.15rem;
+            color: var(--dark);
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        /* Custom Project Showcase Box (Dynamic Link) */
+        .project-highlight {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e293b 100%);
+            border: none;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .project-highlight::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .project-highlight .card-title {
+            color: white;
+        }
+
+        .project-highlight p {
+            color: #cbd5e1;
+            margin-bottom: 24px;
+        }
+
+        /* Elegant button style */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.3);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .btn:hover {
+            background-color: #0369a1;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(2, 132, 199, 0.4);
+        }
+
+        .btn svg {
+            margin-left: 8px;
+            transition: var(--transition);
+        }
+
+        .btn:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Interactive STEM Tab Section */
+        .tab-system {
+            margin-top: 30px;
+        }
+
+        .tab-headers {
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background-color: var(--light);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .stat-lbl {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Sidebar / Status Widget */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .widget {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Live Office Indicator */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f1f5f9;
+            color: #475569;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #94a3b8;
+            position: relative;
+        }
+
+        .status-dot.active {
+            background-color: #10b981;
+        }
+        
+        .status-dot.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background-color: #10b981;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        .info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 8px;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: #94a3b8;
+            padding: 40px 0;
+            border-top: 1px solid #1e293b;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-brand {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.6rem;
+            }
+            .nav-links {
+                display: none; /* Keep layout clean on mobile viewports */
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col">
+<body>
 
-    <!-- Header & Navigation -->
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-primary-600 text-white p-2.5 rounded-lg shadow-md shadow-primary-600/20">
-                    <i class="fa-solid fa-graduation-cap text-lg"></i>
-                </div>
-                <div>
-                    <span class="font-bold text-lg tracking-tight block">Sagar Paudel</span>
-                    <span class="text-xs text-slate-500 dark:text-slate-400 block -mt-1">Dean of STEM · Hill College</span>
-                </div>
-            </div>
-            
-            <nav class="hidden md:flex space-x-8 text-sm font-medium">
-                <a href="#about" class="text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">About</a>
-                <a href="#featured" class="text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Interactive Tools</a>
-                <a href="#academic" class="text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Experience</a>
-                <a href="#contact" class="text-slate-600 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Contact</a>
-            </nav>
+    <!-- Responsive Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="logo">Sagar Paudel.</a>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link">Home</a></li>
+                <li><a href="#initiatives" class="nav-link">STEM Divisions</a></li>
+                <li><a href="life_in_universe.html" class="nav-link">Universe Project</a></li>
+                <li><a href="prompt_generator2.html" class="nav-link">Prompt Generator</a></li>
+            </ul>
+        </div>
+    </nav>
 
-            <div class="flex items-center space-x-4">
-                <!-- Theme Toggle Button -->
-                <button id="themeToggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none" aria-label="Toggle Dark Mode">
-                    <i id="themeIcon" class="fa-solid fa-moon"></i>
-                </button>
-                <a href="#contact" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md shadow-primary-600/10 transition-all hover:shadow-primary-600/25">Office Hours</a>
-            </div>
+    <!-- Header Hero Grid Section -->
+    <header>
+        <div class="container hero-content">
+            <div class="title-pre">Leadership Profile</div>
+            <h1>Sagar Paudel</h1>
+            <div class="hero-subtitle">Dean of STEM</div>
+            <div class="institution-badge">Hill College</div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="about" class="py-16 md:py-24 border-b border-slate-200 dark:border-slate-900 transition-colors duration-300">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+    <!-- Main Section -->
+    <main class="container">
+        <div class="grid-layout">
+            
+            <!-- Left Side Core Content -->
+            <div class="content-area">
                 
-                <!-- Left: Profile Info -->
-                <div class="md:col-span-7 space-y-6">
-                    <div class="inline-flex items-center space-x-2 bg-primary-50 dark:bg-primary-950/40 text-primary-700 dark:text-primary-300 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
-                        <span class="flex h-2 w-2 relative">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
-                        </span>
-                        <span>Administration & Leadership</span>
+                <!-- Welcome Card -->
+                <section class="card">
+                    <h2 class="card-title">Dean's Address</h2>
+                    <p class="lead-text">Welcome to the Science, Technology, Engineering, and Mathematics division at Hill College.</p>
+                    <p>Our division focuses on crafting highly modern, hands-on environments where academic excellence intersects directly with scientific curiosity. By aligning industry-driven methodologies with robust lecture structures, we prepare our collegiate community to challenge conventions and innovate in a changing landscape.</p>
+                </section>
+
+                <!-- Dynamic Project Spotlight (Contains Requested Link) -->
+                <section class="card project-highlight" style="background: linear-gradient(135deg, #1e3a8a 0%, #0284c7 100%);">
+                    <h2 class="card-title">Interactive Research Space</h2>
+                    <p>Dive deep into my recent seminar materials examining Astrobiology, cosmic evolution, and habitable goldilocks thresholds across stellar neighborhoods.</p>
+                    <a href="life_in_universe.html" class="btn">
+                        Explore Life in the Universe
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                </section>
+
+                <section class="card project-highlight" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); border-top: 4px solid var(--primary-light);">
+                    <h2 class="card-title">AI Curricula Engineering</h2>
+                    <p>Access our newly developed, advanced prompt generation tool optimized for academic structures, instructional design schemas, and complex research querying.</p>
+                    <a href="prompt_generator2.html" class="btn" style="background-color: var(--primary-light); box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);">
+                        Launch Prompt Generator
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </a>
+                </section>
+
+                <!-- STEM Initiatives Tab System -->
+                <section class="card" id="initiatives">
+                    <h2 class="card-title">STEM Divisional Departments</h2>
+                    <p style="margin-bottom: 20px;">Select a department below to explore active pathways, laboratory scopes, and student enrollment metrics.</p>
+                    
+                    <div class="tab-system">
+                        <div class="tab-headers">
+                            <button class="tab-btn active" onclick="switchTab('science')">Science</button>
+                            <button class="tab-btn" onclick="switchTab('tech')">Technology</button>
+                            <button class="tab-btn" onclick="switchTab('engineering')">Engineering</button>
+                            <button class="tab-btn" onclick="switchTab('math')">Mathematics</button>
+                        </div>
+
+                        <!-- Science Pane -->
+                        <div class="tab-pane active" id="pane-science">
+                            <p>Featuring cutting-edge programs in Physics, Biology, and Chemistry. Our students engage in active field research and modern lab work to explore natural and organic systems.</p>
+                            <div class="stat-grid">
+                                <div class="stat-box">
+                                    <div class="stat-val">12</div>
+                                    <div class="stat-lbl">Active Lab Groups</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-val">94%</div>
+                                    <div class="stat-lbl">Research Placement</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tech Pane -->
+                        <div class="tab-pane" id="pane-tech">
+                            <p>Focusing on foundational software development, computer security paradigms, and database systems. Designed in step with contemporary modern tech stacks.</p>
+                            <div class="stat-grid">
+                                <div class="stat-box">
+                                    <div class="stat-val">320+</div>
+                                    <div class="stat-lbl">Code Repositories</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-val">5</div>
+                                    <div class="stat-lbl">Tech Certifications</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Engineering Pane -->
+                        <div class="tab-pane" id="pane-engineering">
+                            <p>From CAD prototyping to physical hardware development. Students study structural design patterns, thermodynamics, and real-world system optimization.</p>
+                            <div class="stat-grid">
+                                <div class="stat-box">
+                                    <div class="stat-val">8</div>
+                                    <div class="stat-lbl">Annual Prototypes</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-val">1:1</div>
+                                    <div class="stat-lbl">Equipment Ratio</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Math Pane -->
+                        <div class="tab-pane" id="pane-math">
+                            <p>Uncovering computational strategies, statistics models, and abstract algebra algorithms that provide the necessary bedrock logic for all of STEM.</p>
+                            <div class="stat-grid">
+                                <div class="stat-box">
+                                    <div class="stat-val">100%</div>
+                                    <div class="stat-lbl">Foundational Core</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-val">15</div>
+                                    <div class="stat-lbl">Symposium Papers</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Right Side Sidebar Info -->
+            <div class="sidebar">
+                
+                <!-- Status Dashboard Widget -->
+                <div class="widget">
+                    <div class="widget-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-light)"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        Administration Dashboard
                     </div>
                     
-                    <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-                        Sagar Paudel
-                    </h1>
-                    <p class="text-xl font-medium text-primary-600 dark:text-primary-400 -mt-2">
-                        Dean of Science, Technology, Engineering, & Mathematics (STEM)
-                    </p>
-                    <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                        <i class="fa-solid fa-building-columns"></i> Hill College Academic Leadership
-                    </p>
-
-                    <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
-                        Dedicated to fostering innovative academic pathways, pioneering experiential learning paradigms, and bridging the gap between theoretical knowledge and real-world STEM applications. Facilitating cutting-edge curriculum architectures to empower the next generation of scientists, engineers, and digital pioneers.
-                    </p>
-
-                    <!-- Stats / Pillars of Mission -->
-                    <div class="grid grid-cols-3 gap-4 pt-4">
-                        <div class="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center shadow-sm">
-                            <span class="block text-2xl font-bold text-slate-900 dark:text-white">STEM</span>
-                            <span class="text-xs text-slate-500 dark:text-slate-400">Curriculums</span>
-                        </div>
-                        <div class="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center shadow-sm">
-                            <span class="block text-2xl font-bold text-slate-900 dark:text-white">100%</span>
-                            <span class="text-xs text-slate-500 dark:text-slate-400">Student Centered</span>
-                        </div>
-                        <div class="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center shadow-sm">
-                            <span class="block text-2xl font-bold text-slate-900 dark:text-white">Active</span>
-                            <span class="text-xs text-slate-500 dark:text-slate-400">Innovation Lab</span>
-                        </div>
+                    <div id="office-status" class="status-pill">
+                        <span class="status-dot" id="status-dot"></span>
+                        <span id="status-text">Calculating status...</span>
                     </div>
+
+                    <ul class="info-list">
+                        <li class="info-item">
+                            <span class="info-label">Office Location</span>
+                            <span class="info-value">STEM Hall 302</span>
+                        </li>
+                        <li class="info-item">
+                            <span class="info-label">Campus</span>
+                            <span class="info-value">Hill College</span>
+                        </li>
+                        <li class="info-item">
+                            <span class="info-label">Current local time</span>
+                            <span id="live-time" class="info-value">00:00:00 PM</span>
+                        </li>
+                    </ul>
                 </div>
 
-                <!-- Right: STEM Visual / Quote Box -->
-                <div class="md:col-span-5 flex flex-col justify-center">
-                    <div class="relative bg-gradient-to-tr from-primary-600 to-sky-500 dark:from-primary-900 dark:to-slate-900 p-8 rounded-3xl shadow-xl text-white overflow-hidden group">
-                        <!-- Abstract Design Overlays -->
-                        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-all duration-500"></div>
-                        <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-sky-300/10 rounded-full blur-xl"></div>
-                        
-                        <div class="relative z-10 space-y-6">
-                            <div class="flex justify-between items-center">
-                                <span class="text-xs font-semibold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-white uppercase tracking-wider">STEM Inspiration</span>
-                                <i class="fa-solid fa-atom text-2xl text-sky-200 animate-spin" style="animation-duration: 10s;"></i>
-                            </div>
-                            
-                            <!-- Interactive Quote Section -->
-                            <div class="min-h-[140px] flex flex-col justify-center">
-                                <p id="quoteText" class="text-lg font-medium leading-relaxed italic">
-                                    "The beautiful thing about learning is nobody can take it away from you."
-                                </p>
-                                <p id="quoteAuthor" class="text-xs font-semibold text-sky-200 mt-3 text-right">
-                                    — B.B. King
-                                </p>
-                            </div>
-
-                            <button onclick="generateQuote()" class="w-full py-2.5 bg-white text-primary-900 font-semibold rounded-xl hover:bg-slate-100 transition-all shadow-lg shadow-black/10 active:scale-[0.98] flex items-center justify-center gap-2 text-sm">
-                                <i class="fa-solid fa-rotate"></i> Next Inspiring Thought
-                            </button>
-                        </div>
+                <!-- Academic Pillars -->
+                <div class="widget" style="background-color: var(--primary); color: white;">
+                    <div class="widget-title" style="color: var(--accent);">
+                        Our Pillars
                     </div>
+                    <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 12px;">Under Dean Sagar Paudel's leadership, the STEM Division is focused on three strategic directions:</p>
+                    <ul style="padding-left: 20px; font-size: 0.9rem; display: flex; flex-direction: column; gap: 8px; opacity: 0.95;">
+                        <li>Undergraduate Research Frameworks</li>
+                        <li>Inclusive STEM Classrooms</li>
+                        <li>Active Regional Partnerships</li>
+                    </ul>
                 </div>
 
             </div>
+
         </div>
-    </section>
-
-    <!-- Featured Interactive Tools (requested links) -->
-    <section id="featured" class="py-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
-                    Featured Interactive Portals
-                </h2>
-                <p class="mt-4 text-lg text-slate-500 dark:text-slate-400">
-                    Explore these dynamic STEM web apps curated and designed to support scientific inquiry and educational optimization.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <!-- Tool 1: Life in the Universe -->
-                <div class="group relative flex flex-col justify-between bg-slate-50 dark:bg-slate-950 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-primary-500 dark:hover:border-primary-400 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/5">
-                    <div>
-                        <div class="inline-flex items-center justify-center p-3.5 bg-primary-100 dark:bg-primary-950/80 text-primary-600 dark:text-primary-400 rounded-xl mb-6">
-                            <i class="fa-solid fa-user-astronaut text-2xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
-                            Astrobiology: Life in the Universe
-                        </h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
-                            A dynamic, scientific sandbox designed for exploring planetary habitability zones, calculating stellar evolution vectors, and mapping potential extraterrestrial life criteria using the Drake Equation.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md">Physics</span>
-                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md">Astrobiology</span>
-                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md">Simulation</span>
-                        </div>
-                    </div>
-                    <a href="life_in_universe.html" class="inline-flex items-center justify-between w-full px-5 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl transition-all shadow-md hover:shadow-primary-600/20 group-hover:translate-x-0.5">
-                        <span>Launch Universe Explorer</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <!-- Tool 2: Prompt Generator -->
-                <div class="group relative flex flex-col justify-between bg-slate-50 dark:bg-slate-950 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-primary-500 dark:hover:border-primary-400 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/5">
-                    <div>
-                        <div class="inline-flex items-center justify-center p-3.5 bg-primary-100 dark:bg-primary-950/80 text-primary-600 dark:text-primary-400 rounded-xl mb-6">
-                            <i class="fa-solid fa-wand-magic-sparkles text-2xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
-                            Academic Prompt Generator
-                        </h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
-                            An advanced interactive engine crafted to structure highly effective prompts for Large Language Models. Tailored specifically for educators, researchers, and students to target robust academic outputs.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md">Generative AI</span>
-                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md">Prompt Engineering</span>
-                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-200/60 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-md">Pedagogy</span>
-                        </div>
-                    </div>
-                    <a href="prompt_generator.html" class="inline-flex items-center justify-between w-full px-5 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl transition-all shadow-md hover:shadow-primary-600/20 group-hover:translate-x-0.5">
-                        <span>Launch Prompt Engineer</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Academic Background & Experience -->
-    <section id="academic" class="py-16 border-b border-slate-200 dark:border-slate-900 transition-colors duration-300">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                
-                <!-- Left column: Educational Milestones -->
-                <div class="lg:col-span-5 space-y-6">
-                    <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                        Curriculum Vitae Highlights
-                    </h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
-                        A lifetime dedication to the advancement of institutional infrastructure and mathematical modeling. Over a decade of fostering positive programmatic accreditations, student success systems, and innovative grant structures.
-                    </p>
-                    <div class="p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                        <div class="flex gap-4">
-                            <div class="text-primary-600 dark:text-primary-400 text-lg"><i class="fa-solid fa-building-columns"></i></div>
-                            <div>
-                                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Hill College STEM Division</h4>
-                                <p class="text-xs text-slate-500">Leading departments in Mathematics, Engineering, Computer Science, and Natural Sciences.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
-                            <div class="text-primary-600 dark:text-primary-400 text-lg"><i class="fa-solid fa-award"></i></div>
-                            <div>
-                                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Academic Excellence Champion</h4>
-                                <p class="text-xs text-slate-500">Active member of key academic consortiums focusing on STEM integration across Texas.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right column: Interactive Timeline -->
-                <div class="lg:col-span-7 space-y-6">
-                    <div class="space-y-6 relative before:absolute before:inset-y-1 before:left-3.5 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
-                        
-                        <!-- Timeline Item 1 -->
-                        <div class="relative pl-10">
-                            <div class="absolute left-1.5 top-1.5 w-4 h-4 rounded-full border-4 border-white dark:border-slate-950 bg-primary-600 dark:bg-primary-400 shadow-sm"></div>
-                            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
-                                <span class="text-xs font-bold text-primary-600 dark:text-primary-400 block mb-1">Current Tenure</span>
-                                <h3 class="font-bold text-slate-900 dark:text-white text-base">Dean of STEM</h3>
-                                <p class="text-xs text-slate-500 mb-2">Hill College</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                                    Overseeing curriculum quality, professional engineering accreditations, computer laboratories, and collaborative research initiatives. Designed a streamlined pipeline for students to transition directly into partner university STEM networks.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Timeline Item 2 -->
-                        <div class="relative pl-10">
-                            <div class="absolute left-1.5 top-1.5 w-4 h-4 rounded-full border-4 border-white dark:border-slate-950 bg-primary-600 dark:bg-primary-400 shadow-sm"></div>
-                            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
-                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 block mb-1">Previous</span>
-                                <h3 class="font-bold text-slate-900 dark:text-white text-base">Professor & Department Chair of Physics</h3>
-                                <p class="text-xs text-slate-500 mb-2">Higher Education Systems</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                                    Pioneered computer-assisted laboratory coursework and introduced astronomical modeling concepts into core Physics lecture blocks. Fostered collaborative learning using real planetary dataset analyses.
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Contact/Office Hours Simulator -->
-    <section id="contact" class="py-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                
-                <!-- Info block -->
-                <div class="space-y-6">
-                    <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                        Let's Connect
-                    </h2>
-                    <p class="text-slate-500 dark:text-slate-400 leading-relaxed">
-                        Whether you are an aspiring student navigating your degree options, a fellow faculty member working on research designs, or an external stakeholder interested in partnership initiatives, my door is always open.
-                    </p>
-
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-3.5 text-slate-600 dark:text-slate-400">
-                            <div class="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg"><i class="fa-solid fa-envelope w-5 text-center"></i></div>
-                            <div>
-                                <span class="text-xs block text-slate-400">Official Email</span>
-                                <span class="font-medium text-slate-900 dark:text-white">spaudel@hillcollege.edu</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-3.5 text-slate-600 dark:text-slate-400">
-                            <div class="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg"><i class="fa-solid fa-map-location-dot w-5 text-center"></i></div>
-                            <div>
-                                <span class="text-xs block text-slate-400">Administration Office</span>
-                                <span class="font-medium text-slate-900 dark:text-white">Hill College Campus, STEM Admin Block</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Interactive Message Form -->
-                <div class="bg-slate-50 dark:bg-slate-950 p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Send a Virtual Query</h3>
-                    
-                    <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5" for="senderName">Full Name</label>
-                            <input type="text" id="senderName" required class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm" placeholder="Dr. John Doe">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5" for="senderEmail">Email Address</label>
-                            <input type="email" id="senderEmail" required class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm" placeholder="john.doe@example.com">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5" for="queryType">Purpose of Message</label>
-                            <select id="queryType" class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm">
-                                <option value="Advising & Curriculums">Academic Advising & Curriculum Query</option>
-                                <option value="Research & Projects">Research / Collaborative Proposals</option>
-                                <option value="General Office">Schedule Virtual Office Hours</option>
-                                <option value="Other">Other Administrative Inquiry</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5" for="messageText">Your Message</label>
-                            <textarea id="messageText" rows="4" required class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm" placeholder="Write your message here..."></textarea>
-                        </div>
-                        
-                        <button type="submit" class="w-full py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-primary-600/25 active:scale-[0.99]">
-                            Submit Office Query <i class="fa-solid fa-paper-plane ml-1"></i>
-                        </button>
-                    </form>
-
-                    <!-- Custom Success Message Box (Avoids alerts) -->
-                    <div id="successBox" class="hidden absolute inset-0 bg-white dark:bg-slate-950 p-6 flex flex-col justify-center items-center text-center space-y-4">
-                        <div class="h-16 w-16 bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center text-3xl">
-                            <i class="fa-solid fa-check-double animate-bounce"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-slate-900 dark:text-white">Query Transmitted</h4>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 max-w-sm">
-                            Thank you, <span id="insertedName" class="font-semibold text-slate-900 dark:text-white"></span>. Your query regarding "<span id="insertedSubject" class="italic"></span>" has been received. Sagar Paudel's administrative office will follow up shortly.
-                        </p>
-                        <button onclick="resetContactForm()" class="px-5 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
-                            Send Another Message
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="mt-auto bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-900 py-12 transition-colors duration-300">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 text-sm text-slate-500 dark:text-slate-400">
-                <div class="text-center md:text-left space-y-1">
-                    <p class="font-bold text-slate-900 dark:text-white">Dean Sagar Paudel</p>
-                    <p>Division of STEM &middot; Hill College</p>
-                </div>
-                
-                <div class="flex space-x-6 text-xl">
-                    <a href="https://github.com" target="_blank" class="hover:text-primary-600 transition-colors" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-                    <a href="https://linkedin.com" target="_blank" class="hover:text-primary-600 transition-colors" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="https://orcid.org" target="_blank" class="hover:text-primary-600 transition-colors" aria-label="ORCID"><i class="fa-brands fa-orcid"></i></a>
-                </div>
-                
-                <div class="text-center md:text-right text-xs">
-                    <p>&copy; 2026 Sagar Paudel. All rights reserved.</p>
-                    <p class="mt-1">Built with modern HTML5 & Tailwind CSS.</p>
-                </div>
+    <footer>
+        <div class="container footer-content">
+            <div>
+                <span class="footer-brand">Sagar Paudel</span>
+                <p style="margin-top: 6px; font-size: 0.8rem; color: #64748b;">Dean of STEM | Hill College</p>
             </div>
+            <p>&copy; 2026 Sagar Paudel. Developed in accordance with Hill College digital design systems.</p>
         </div>
     </footer>
 
-    <!-- Embedded JavaScript for Interactive Features -->
+    <!-- Interactive JavaScript Engine -->
     <script>
-        // 1. Dark / Light Mode Logic
-        const themeToggleBtn = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        
-        // Check for saved preference, otherwise default to dark mode
-        if (localStorage.getItem('theme') === 'light') {
-            document.documentElement.classList.remove('dark');
-            themeIcon.className = 'fa-solid fa-moon';
-        } else {
-            document.documentElement.classList.add('dark');
-            themeIcon.className = 'fa-solid fa-sun';
+        // Tab system navigation logic
+        function switchTab(tabId) {
+            // Remove active classes
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+            // Find matching tab button by searching buttons matching content
+            const clickedButton = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.textContent.toLowerCase() === tabId);
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+
+            // Set matched pane active
+            const activePane = document.getElementById(`pane-${tabId}`);
+            if (activePane) {
+                activePane.classList.add('active');
+            }
         }
 
-        themeToggleBtn.addEventListener('click', () => {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                themeIcon.className = 'fa-solid fa-moon';
-                localStorage.setItem('theme', 'light');
+        // Live dashboard controller (Simulates Active Office Status based on Hours)
+        function updateDashboard() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            
+            // Format Time display beautifully
+            const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('live-time').textContent = formattedTime;
+
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+
+            // Office is active Mon-Fri, 8 AM to 5 PM
+            const day = now.getDay();
+            const isOpen = (day >= 1 && day <= 5) && (hours >= 8 && hours < 17);
+
+            if (isOpen) {
+                statusDot.className = 'status-dot active';
+                statusText.innerHTML = "Office Active & Online";
             } else {
-                document.documentElement.classList.add('dark');
-                themeIcon.className = 'fa-solid fa-sun';
-                localStorage.setItem('theme', 'dark');
+                statusDot.className = 'status-dot';
+                statusText.innerHTML = "Office Closed (Off-hours)";
             }
-        });
-
-        // 2. STEM Quotes Collection & Generator
-        const stemQuotes = [
-            {
-                text: "The beautiful thing about learning is nobody can take it away from you.",
-                author: "B.B. King"
-            },
-            {
-                text: "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.",
-                author: "Marie Curie"
-            },
-            {
-                text: "Science is not only a disciple of reason but, also, one of romance and passion.",
-                author: "Stephen Hawking"
-            },
-            {
-                text: "The science of today is the technology of tomorrow.",
-                author: "Edward Teller"
-            },
-            {
-                text: "Somewhere, something incredible is waiting to be known.",
-                author: "Carl Sagan"
-            },
-            {
-                text: "What we know is a drop, what we don't know is an ocean.",
-                author: "Isaac Newton"
-            }
-        ];
-
-        function generateQuote() {
-            const quoteTextEl = document.getElementById('quoteText');
-            const quoteAuthorEl = document.getElementById('quoteAuthor');
-            
-            // Generate a random quote avoiding the exact same one if possible
-            let currentQuote = quoteTextEl.textContent;
-            let filteredQuotes = stemQuotes.filter(q => `"${q.text}"` !== currentQuote);
-            let randomIndex = Math.floor(Math.random() * filteredQuotes.length);
-            let selected = filteredQuotes[randomIndex];
-
-            // Apply fade animation
-            quoteTextEl.style.opacity = 0;
-            quoteAuthorEl.style.opacity = 0;
-            
-            setTimeout(() => {
-                quoteTextEl.textContent = `"${selected.text}"`;
-                quoteAuthorEl.textContent = `— ${selected.author}`;
-                quoteTextEl.style.opacity = 1;
-                quoteAuthorEl.style.opacity = 1;
-            }, 250);
         }
 
-        // Add CSS transition properties to elements on load
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('quoteText').style.transition = "opacity 0.25s ease-in-out";
-            document.getElementById('quoteAuthor').style.transition = "opacity 0.25s ease-in-out";
-        });
-
-        // 3. Contact Form Submission simulation (Aesthetic success modal)
-        function handleFormSubmit(event) {
-            event.preventDefault(); // Prevent standard page reload
-
-            const name = document.getElementById('senderName').value;
-            const email = document.getElementById('senderEmail').value;
-            const subject = document.getElementById('queryType').value;
-            const message = document.getElementById('messageText').value;
-
-            // Display inputs inside the feedback panel
-            document.getElementById('insertedName').textContent = name;
-            document.getElementById('insertedSubject').textContent = subject;
-
-            // Toggle custom UI modal
-            const successBox = document.getElementById('successBox');
-            successBox.classList.remove('hidden');
-            successBox.classList.add('flex');
-        }
-
-        function resetContactForm() {
-            document.getElementById('contactForm').reset();
-            const successBox = document.getElementById('successBox');
-            successBox.classList.add('hidden');
-            successBox.classList.remove('flex');
-        }
+        // Run dashboard cycle
+        updateDashboard();
+        setInterval(updateDashboard, 1000);
     </script>
 </body>
 </html>
