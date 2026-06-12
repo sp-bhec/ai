@@ -7,7 +7,7 @@
     <!-- Google Fonts for premium academic typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2 family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -80,16 +80,17 @@
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 16px;
             list-style: none;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .nav-link {
             color: var(--dark);
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: var(--transition);
             position: relative;
             padding: 4px 0;
@@ -591,6 +592,7 @@
                 <li><a href="stellar_evolution.html" class="nav-link">Stellar Evolution</a></li>
                 <li><a href="prompt_generator.html" class="nav-link">Prompt Gen v1</a></li>
                 <li><a href="prompt_generator2.html" class="nav-link">Prompt Gen v2</a></li>
+                <li><a href="testgen.html" class="nav-link">Test Gen</a></li>
             </ul>
         </div>
     </nav>
@@ -635,6 +637,16 @@
                     <p>Analyze core nucleosynthesis pathways, structural hydrostatic equilibria, and thermodynamic cycles throughout stellar life phases from protostars to supernovae.</p>
                     <a href="stellar_evolution.html" class="btn">
                         Explore Stellar Evolution
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                </section>
+
+                <!-- Interactive Assessment Tool Spotlight Card (testgen.html) -->
+                <section class="card project-highlight" style="background: linear-gradient(135deg, #0d9488 0%, var(--dark) 100%); border-top: 4px solid var(--border);">
+                    <h2 class="card-title">Interactive STEM Test Generator</h2>
+                    <p>Build and generate structured exam templates, dynamic quiz blocks, and customizable academic evaluations across science, technology, engineering, and mathematical disciplines.</p>
+                    <a href="testgen.html" class="btn" style="background-color: var(--border); color: var(--dark); box-shadow: 0 4px 6px -1px rgba(254, 240, 138, 0.3);">
+                        Launch Assessment Builder
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </a>
                 </section>
