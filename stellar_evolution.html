@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Lesson: Stellar Evolution</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-color: #c9d1d9;
+            --text-bright: #f0f6fc;
+            --accent-blue: #58a6ff;
+            --accent-purple: #bc8cff;
+            --accent-orange: #ffa657;
+            --accent-red: #ff7b72;
+            --accent-green: #7ee787;
+            --border-color: #30363d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #1f1a3a 0%, #0d1117 100%);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--text-bright);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        nav button {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        nav button:hover, nav button.active {
+            background-color: var(--accent-blue);
+            color: #000;
+            border-color: var(--accent-blue);
+        }
+
+        .lesson-section {
+            display: none;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .lesson-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--text-bright);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: var(--accent-blue);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        /* Glossary Grid Layout */
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        @media(min-width: 768px) {
+            .glossary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .glossary-card {
+            background-color: #1f242c;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            transition: transform 0.2s;
+        }
+
+        .glossary-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-purple);
+        }
+
+        .glossary-term {
+            font-weight: bold;
+            color: var(--accent-purple);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .glossary-anchor {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            background-color: rgba(188, 140, 255, 0.1);
+            color: var(--accent-purple);
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        /* Core Concepts Insights */
+        .insight-box {
+            background-color: rgba(88, 166, 255, 0.05);
+            border-left: 4px solid var(--accent-blue);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .insight-box.quote {
+            border-left-color: var(--accent-orange);
+            background-color: rgba(255, 166, 87, 0.05);
+            font-style: italic;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        /* Interactive Lifecycles */
+        .evolution-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .evolution-btn {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-low-mass {
+            background-color: var(--accent-orange);
+            color: #000;
+        }
+
+        .btn-high-mass {
+            background-color: var(--accent-red);
+            color: #fff;
+        }
+
+        .evolution-display {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 200px;
+            margin-top: 15px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1f242c;
+            color: var(--text-bright);
+        }
+
+        /* Assessment Elements */
+        .quiz-container {
+            margin-top: 20px;
+        }
+
+        .question-card {
+            background-color: #1f242c;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .options-list {
+            list-style-type: none;
+            margin-top: 10px;
+        }
+
+        .options-list li {
+            margin-bottom: 10px;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover:not([disabled]) {
+            background-color: #30363d;
+        }
+
+        .option-btn.correct {
+            background-color: rgba(126, 231, 135, 0.2) !important;
+            border-color: var(--accent-green) !important;
+            color: var(--accent-green);
+        }
+
+        .option-btn.incorrect {
+            background-color: rgba(255, 123, 114, 0.2) !important;
+            border-color: var(--accent-red) !important;
+            color: var(--accent-red);
+        }
+
+        .text-input-zone {
+            margin-top: 10px;
+        }
+
+        .text-input-zone textarea {
+            width: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-bright);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 6px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .action-btn {
+            background-color: var(--accent-blue);
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .feedback-box {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            background-color: #161b22;
+            border: 1px dashed var(--border-color);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Accessibility Info Area */
+        .accessibility-footer {
+            background-color: #1f242c;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Stellar Evolution</h1>
+        <p>“The life of a star is governed almost entirely by one factor: its mass at birth.”</p>
+    </header>
+
+    <nav aria-label="Lesson Navigation">
+        <button onclick="switchTab('glossary')" id="tab-glossary" class="active">1. Glossary</button>
+        <button onclick="switchTab('concepts')" id="tab-concepts">2. Core Concepts</button>
+        <button onclick="switchTab('pretest')" id="tab-pretest">3. Pre-Test</button>
+        <button onclick="switchTab('narrative')" id="tab-narrative">4. Core Narrative</button>
+        <button onclick="switchTab('synthesis')" id="tab-synthesis">5. Synthesis</button>
+        <button onclick="switchTab('posttest')" id="tab-posttest">6. Post-Assessment</button>
+    </nav>
+
+    <section id="glossary" class="lesson-section active">
+        <h2>1. Glossary of Key Terms & Vocabulary</h2>
+        <div class="glossary-grid">
+            <div class="glossary-card">
+                <div class="glossary-term">Nebula</div>
+                <div>A vast cloud of gas and dust where stars are born.</div>
+                <div class="glossary-anchor">Conceptual Anchor: Stellar “nursery”</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Main Sequence Star</div>
+                <div>A stable star fusing hydrogen into helium in its core.</div>
+                <div class="glossary-anchor">Conceptual Anchor: Longest life phase</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Red Giant / Red Supergiant</div>
+                <div>A late-stage star that expands after hydrogen fuel is depleted.</div>
+                <div class="glossary-anchor">Conceptual Anchor: Expansion phase</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">White Dwarf</div>
+                <div>A dense, cooling stellar remnant of low-mass stars.</div>
+                <div class="glossary-anchor">Conceptual Anchor: Stellar “ember”</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Supernova</div>
+                <div>A powerful explosion marking the death of a high-mass star.</div>
+                <div class="glossary-anchor">Conceptual Anchor: Violent endpoint</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Neutron Star</div>
+                <div>An ultra-dense remnant composed mostly of neutrons.</div>
+                <div class="glossary-anchor">Conceptual Anchor: Extreme compression</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Black Hole</div>
+                <div>A region of space with gravity so strong that not even light escapes.</div>
+                <div class="glossary-anchor">Conceptual Anchor: Collapse to singularity</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="concepts" class="lesson-section">
+        <h2>2. Core Key Concepts & Cognitive Framework</h2>
+        <h3>The Stellar Evolution Framework</h3>
+        
+        <div class="insight-box">
+            <strong>Mass Determines Fate:</strong>
+            <ul>
+                <li>Low-mass stars (like our Sun) evolve slowly and end their lifecycles gently.</li>
+                <li>High-mass stars evolve rapidly and explosively.</li>
+            </ul>
+        </div>
+
+        <div class="insight-box">
+            <strong>Energy Production via Nuclear Fusion:</strong>
+            <p>Stars generate energy by fusing lighter elements into heavier ones. This dynamic starts on the Main Sequence with Hydrogen fusing into Helium. While low-mass stars stop shortly after this point, massive stars continue executing heavier fusion cycles deep within their cores.</p>
+        </div>
+
+        <div class="insight-box">
+            <strong>Balance of Forces (Hydrostatic Equilibrium):</strong>
+            <p>A star is an active cosmic tug-of-war. <strong>Gravity</strong> works relentlessly to pull stellar material inward, while <strong>Radiation Pressure</strong> from core nuclear fusion pushes outward. Stability is achieved when these forces are balanced cleanly.</p>
+        </div>
+
+        <h3>The Universal Lifecycle Pattern</h3>
+        <p>Every star transitions through this basic baseline roadmap before diverging: <strong>Nebula &rarr; Protostar &rarr; Main Sequence &rarr; Death Phase</strong>.</p>
+    </section>
+
+    <section id="pretest" class="lesson-section">
+        <h2>3. Diagnostic Pre-Test & Active Recall Probe</h2>
+        <p>Test your current knowledge before exploring the core text. Immediate tracking will provide instant guidance.</p>
+        
+        <div class="quiz-container">
+            <div class="question-card" id="pre-q1">
+                <p><strong>1. What determines how a star will evolve over time?</strong></p>
+                <ul class="options-list">
+                    <li><button class="option-btn" onclick="checkPreMCQ('pre-q1', false)">A. Temperature</button></li>
+                    <li><button class="option-btn" onclick="checkPreMCQ('pre-q1', false)">B. Size</button></li>
+                    <li><button class="option-btn" onclick="checkPreMCQ('pre-q1', true)">C. Mass</button></li>
+                    <li><button class="option-btn" onclick="checkPreMCQ('pre-q1', false)">D. Distance from Earth</button></li>
+                </ul>
+                <div class="feedback-box hidden"></div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>2. What is the main energy source of stars? (Short Answer)</strong></p>
+                <div class="text-input-zone">
+                    <textarea id="pre-sa1" rows="2" placeholder="Type your idea here..."></textarea>
+                    <button class="action-btn" onclick="revealSA('pre-sa1-fb')">Submit & Check Answer</button>
+                </div>
+                <div id="pre-sa1-fb" class="feedback-box hidden">
+                    <strong>Expert Guide Core Focus:</strong> Nuclear fusion (specifically fusing hydrogen into helium). This process releases the immense energy that powers the star against gravitational collapse.
+                </div>
+            </div>
+
+            <div class="question-card" id="pre-q3">
+                <p><strong>3. Which stage represents the longest phase of a star’s life?</strong></p>
+                <ul class="options-list">
+                    <li><button class="option-btn" onclick="checkPreMCQ('pre-q3', false)">A. Nebula</button></li>
+                    <li><button class="option-btn" onclick="checkPreMCQ('pre-q3', true)">B. Main Sequence</button></li>
+                    <li><button class="option-btn" onclick="checkPreMCQ('pre-q3', false)">C. Red Giant</button></li>
+                    <li><button class="option-btn" onclick="checkPreMCQ('pre-q3', false)">D. Supernova</button></li>
+                </ul>
+                <div class="feedback-box hidden"></div>
+            </div>
+
+            <div class="question-card">
+                <p><strong>4. What happens to low-mass stars after the red giant phase? (Short Answer)</strong></p>
+                <div class="text-input-zone">
+                    <textarea id="pre-sa2" rows="2" placeholder="Type your idea here..."></textarea>
+                    <button class="action-btn" onclick="revealSA('pre-sa2-fb')">Submit & Check Answer</button>
+                </div>
+                <div id="pre-sa2-fb" class="feedback-box hidden">
+                    <strong>Expert Guide Core Focus:</strong> They gracefully shed their outer layers forming a planetary nebula, leaving behind a hot, dense core known as a <strong>White Dwarf</strong>.
+                </div>
+            </div>
+
+            <div class="question-card" id="pre-q5">
+                <p><strong>5. True or False: All stars end their lives as black holes.</strong></p>
+                <ul class="options-list">
+                    <li><button class="option-btn" onclick="checkPreMCQ('pre-q5', false)">True</button></li>
+                    <li><button class="option-btn" onclick="checkPreMCQ('pre-q5', true)">False</button></li>
+                </ul>
+                <div class="feedback-box hidden"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="narrative" class="lesson-section">
+        <h2>4. Comprehensive Core Lesson Narrative</h2>
+        
+        <h3>🌱 Stage 1: Stellar Birth — From Nebula to Protostar</h3>
+        <p>Stars begin in stellar nebulae—gigantic, cold interstellar clouds of gas and dust. Over time, regional density variances allow gravity to pull materials inward. As a pocket collapses, it generates kinetic friction, formatting a glowing core called a <strong>Protostar</strong>.</p>
+        <div class="insight-box quote">“A star is born when nuclear fusion officially ignites within its compressed core.”</div>
+
+        <h3>☀️ Stage 2: Main Sequence — Stellar Stability</h3>
+        <p>Once stable core hydrogen fusion into helium sets in, the star achieves hydrostatic equilibrium. This marks its entry into the Main Sequence. The inward crushing pull of gravity is counterbalanced flawlessly by outward radiation pressure from energetic fusion. Our Sun is currently in this long-term steady phase.</p>
+
+        <h3>🔥 Stage 3: Divergence — Choose an Evolutionary Track</h3>
+        <p>See how the stellar roadmap changes cleanly based on mass at birth. Select an option below to witness the pathway interactive breakdown.</p>
+        
+        <div class="evolution-controls">
+            <button class="evolution-btn btn-low-mass" onclick="showTrack('low')">Explore Low-Mass Stars (≤ 8 M☉)</button>
+            <button class="evolution-btn btn-high-mass" onclick="showTrack('high')">Explore High-Mass Stars (> 8 M☉)</button>
+        </div>
+
+        <div id="evolution-display" class="evolution-display">
+            <p style="text-align: center; color: #8b949e; margin-top: 60px;">Click one of the pathways above to populate interactive tracking data...</p>
+        </div>
+
+        <h3 style="margin-top: 30px;">⚖️ Critical Comparison: Low vs High Mass Evolution</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Low-Mass Star</th>
+                    <th>High-Mass Star</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Lifespan</strong></td>
+                    <td>Billions to Trillions of years</td>
+                    <td>Millions of years</td>
+                </tr>
+                <tr>
+                    <td><strong>Final Explosion</strong></td>
+                    <td>No (Gentle planetary nebula)</td>
+                    <td>Yes (Violent Supernova)</td>
+                </tr>
+                <tr>
+                    <td><strong>Final Core State</strong></td>
+                    <td>White Dwarf</td>
+                    <td>Neutron Star or Black Hole</td>
+                </tr>
+                <tr>
+                    <td><strong>Fusion Milestones</strong></td>
+                    <td>Hydrogen &rarr; Helium (briefly Carbon)</td>
+                    <td>Progressive burning up to Iron</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="synthesis" class="lesson-section">
+        <h2>5. Topic Synthesis & Summary</h2>
+        <div class="insight-box" style="border-left-color: var(--accent-green); background-color: rgba(126, 231, 135, 0.03);">
+            <ul>
+                <li style="margin-bottom: 10px;"><strong>Mass is everything:</strong> The initial mass determines gravity levels, core heat capacity, and overall operational lifespan.</li>
+                <li style="margin-bottom: 10px;">The <strong>Main Sequence</strong> is where stars spend roughly 90% of their lifespan executing balanced core hydrogen conversion.</li>
+                <li style="margin-bottom: 10px;"><strong>Low-Mass Cycle:</strong> Nebula &rarr; Protostar &rarr; Main Sequence &rarr; Red Giant &rarr; Planetary Nebula &rarr; White Dwarf.</li>
+                <li style="margin-bottom: 10px;"><strong>High-Mass Cycle:</strong> Nebula &rarr; Protostar &rarr; Main Sequence &rarr; Red Supergiant &rarr; Supernova &rarr; Neutron Star / Black Hole.</li>
+                <li><strong>Cosmic Recycling:</strong> Elements forged in massive star cores and blasted into deep space via supernovae form the foundational atoms of future worlds and biological life.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="posttest" class="lesson-section">
+        <h2>6. Post-Assessment Review Quiz</h2>
+        <p>Complete this multiple-choice tracking evaluation to verify structural mastery. Immediate structural verification is rendered below.</p>
+
+        <div class="quiz-container">
+            <div class="question-card" id="post-q1">
+                <p><strong>1. What is the primary factor determining a star’s evolutionary path?</strong></p>
+                <ul class="options-list">
+                    <li><button class="option-btn" onclick="submitPostMCQ(1, 'A', false)">A. Luminosity</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(1, 'B', true)">B. Mass</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(1, 'C', false)">C. Age</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(1, 'D', false)">D. Composition</button></li>
+                </ul>
+                <div class="feedback-box hidden"></div>
+            </div>
+
+            <div class="question-card" id="post-q2">
+                <p><strong>2. During which phase is hydrogen fusion stable and sustained?</strong></p>
+                <ul class="options-list">
+                    <li><button class="option-btn" onclick="submitPostMCQ(2, 'A', false)">A. Protostar</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(2, 'B', true)">B. Main Sequence</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(2, 'C', false)">C. Red Giant</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(2, 'D', false)">D. White Dwarf</button></li>
+                </ul>
+                <div class="feedback-box hidden"></div>
+            </div>
+
+            <div class="question-card" id="post-q3">
+                <p><strong>3. What is the final stage of a low-mass star?</strong></p>
+                <ul class="options-list">
+                    <li><button class="option-btn" onclick="submitPostMCQ(3, 'A', false)">A. Neutron Star</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(3, 'B', false)">B. Black Hole</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(3, 'C', true)">C. White Dwarf</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(3, 'D', false)">D. Supernova</button></li>
+                </ul>
+                <div class="feedback-box hidden"></div>
+            </div>
+
+            <div class="question-card" id="post-q4">
+                <p><strong>4. What event marks the death of a high-mass star?</strong></p>
+                <ul class="options-list">
+                    <li><button class="option-btn" onclick="submitPostMCQ(4, 'A', false)">A. Nebula collapse</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(4, 'B', false)">B. Red Giant phase</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(4, 'C', true)">C. Supernova</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(4, 'D', false)">D. White dwarf formation</button></li>
+                </ul>
+                <div class="feedback-box hidden"></div>
+            </div>
+
+            <div class="question-card" id="post-q5">
+                <p><strong>5. Why can high-mass stars fuse heavier elements than low-mass stars?</strong></p>
+                <ul class="options-list">
+                    <li><button class="option-btn" onclick="submitPostMCQ(5, 'A', false)">A. They are cooler</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(5, 'B', true)">B. They have stronger gravity and higher core pressure</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(5, 'C', false)">C. They live longer</button></li>
+                    <li><button class="option-btn" onclick="submitPostMCQ(5, 'D', false)">D. They contain more hydrogen</button></li>
+                </ul>
+                <div class="feedback-box hidden"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="accessibility-footer">
+        <h3>♿ ADA Accessibility & Universal Design for Learning (UDL) Features</h3>
+        <p style="font-size: 0.9rem; color: #8b949e;">This responsive layout is optimized for diverse learning dynamic modalities:</p>
+        <ul style="font-size: 0.9rem; color: #8b949e; margin-left: 20px;">
+            <li><strong>Screen-Reader Ready:</strong> Semantically aligned using structured structural heading rules (H1 &rarr; H2 &rarr; H3).</li>
+            <li><strong>Interactive Flexibility:</strong> All buttons and input parameters support straightforward layout parsing and tracking options.</li>
+            <li><strong>Neurodiverse Supports:</strong> Chunked navigation screens let individual learners parse concepts at comfortable systemic speeds.</li>
+        </ul>
+    </footer>
+</div>
+
+<script>
+    // Tab Navigation Logic
+    function switchTab(tabId) {
+        // Hide all sections
+        const sections = document.querySelectorAll('.lesson-section');
+        sections.forEach(sec => sec.classList.remove('active'));
+
+        // Deactivate all navigation tabs
+        const tabs = document.querySelectorAll('nav button');
+        tabs.forEach(tab => tab.classList.remove('active'));
+
+        // Activate targeted tab and window
+        document.getElementById(tabId).classList.add('active');
+        document.getElementById('tab-' + tabId).classList.add('active');
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Diagnostic Pre-Test Logic
+    const preExplanations = {
+        'pre-q1': '<strong>Correct Answer: C. Mass</strong> — Mass sets gravity parameters, controlling overall heat thresholds, life durations, and endings.',
+        'pre-q3': '<strong>Correct Answer: B. Main Sequence</strong> — A typical stellar entity spends roughly 90% of its entire lifespan inside this stable fuel band.',
+        'pre-q5': '<strong>Correct Answer: False</strong> — Only highly dense massive stars compromise core architectures enough to yield black holes.'
+    };
+
+    function checkPreMCQ(questionId, isCorrect) {
+        const questionCard = document.getElementById(questionId);
+        const feedback = questionCard.querySelector('.feedback-box');
+        const buttons = questionCard.querySelectorAll('.option-btn');
+
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            if (btn.textContent.includes('Mass') || btn.textContent.includes('Main Sequence') || btn.textContent.includes('False')) {
+                btn.classList.add('correct');
+            } else if (btn === event.target && !isCorrect) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        feedback.innerHTML = preExplanations[questionId];
+        feedback.classList.remove('hidden');
+    }
+
+    function revealSA(id) {
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    // Interactive Pathway Tracking Logic
+    function showTrack(type) {
+        const display = document.getElementById('evolution-display');
+        if (type === 'low') {
+            display.innerHTML = `
+                <h4 style="color: var(--accent-orange); margin-bottom:10px;">Low-Mass Evolution Lifecycle Roadmap (≤ 8 Solar Masses)</h4>
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li><strong>Main Sequence Phase:</strong> Performs long, calm hydrogen burning over billions of years.</li>
+                    <li><strong>Red Giant Phase:</strong> Hydrogen depletes; core contracts as the outer shell expands cooling outward.</li>
+                    <li><strong>Planetary Nebula:</strong> Outer stellar layers are pulsed off cleanly into deep space.</li>
+                    <li><strong>White Dwarf Core:</strong> A cooling planet-sized residual carbon/oxygen structure is left behind. No explosive death occurred.</li>
+                </ol>
+            `;
+        } else if (type === 'high') {
+            display.innerHTML = `
+                <h4 style="color: var(--accent-red); margin-bottom:10px;">High-Mass Evolution Lifecycle Roadmap (> 8 Solar Masses)</h4>
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li><strong>Massive Main Sequence:</strong> Burns wildly hot, racing through fuel stores in mere millions of years.</li>
+                    <li><strong>Red Supergiant Phase:</strong> Rapid shell expansions fuse heavier core layers (Carbon, Neon, Silicon up to Iron).</li>
+                    <li><strong>Supernova Explosion:</strong> Iron core cannot generate outward fusion pressure. Gravity implodes the core in milliseconds, creating a violent rebound explosion.</li>
+                    <li><strong>Remnant Endstate:</strong> Leaves behind an ultra-compressed <strong>Neutron Star</strong>, or collapses indefinitely into a <strong>Black Hole</strong>.</li>
+                </ol>
+            `;
+        }
+    }
+
+    // Post Assessment Validation Architecture
+    const postData = {
+        1: { correct: 'B', explanation: '<strong>Correct: B. Mass</strong>. Mass dictates structural gravity thresholds and long-term core operational trends.' },
+        2: { correct: 'B', explanation: '<strong>Correct: B. Main Sequence</strong>. Balanced hydro-equilibrium processes validate this phase.' },
+        3: { correct: 'C', explanation: '<strong>Correct: C. White Dwarf</strong>. Low-mass sequences contract down cleanly without producing violent core failures.' },
+        4: { correct: 'C', explanation: '<strong>Correct: C. Supernova</strong>. The ultimate cataclysmic destruction tracking mechanism of massive star species.' },
+        5: { correct: 'B', explanation: '<strong>Correct: B. Stronger gravity and higher pressure</strong>. High-mass cores possess extreme structural profiles allowing heavier nucleosynthesis phases.' }
+    };
+
+    function submitPostMCQ(qNum, selectedLetter, isCorrect) {
+        const qCard = document.getElementById(`post-q` + qNum);
+        const buttons = qCard.querySelectorAll('.option-btn');
+        const feedback = qCard.querySelector('.feedback-box');
+
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            if (btn.textContent.startsWith(postData[qNum].correct)) {
+                btn.classList.add('correct');
+            } else if (btn.textContent.startsWith(selectedLetter) && !isCorrect) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        feedback.innerHTML = postData[qNum].explanation;
+        feedback.classList.remove('hidden');
+    }
+</script>
+
+</body>
+</html>
